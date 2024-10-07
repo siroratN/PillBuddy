@@ -28,7 +28,16 @@ export const caregivers = mySchema.table('caregivers', {
   contact_info: text('contact_info')
 })
 
+export const medicines = mySchema.table('medicines', {
+  id: serial('id').primaryKey(),
+  name: varchar('name', {length: 100}).notNull(),
+  dosage: varchar('dosage'),
+  instructions: text('instructions'),
+  type: varchar('type', {length: 50}).notNull()
+})
+
 
 export type UserSchema = InferSelectModel<typeof users>
-export type patientsSchema = InferSelectModel<typeof patients>
-export type caregiversSchema = InferSelectModel<typeof caregivers>
+export type PatientSchema = InferSelectModel<typeof patients>
+export type CaregiverSchema = InferSelectModel<typeof caregivers>
+export type MedicineSchema = InferSelectModel<typeof caregivers>
