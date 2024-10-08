@@ -3,10 +3,6 @@ import { serial, text, pgTable, pgEnum, pgSchema, uuid, varchar, timestamp, inte
 
 export const mySchema = pgSchema("pillbuddy");
 
-const timestamps = {
-  
-}
-
 export const users = mySchema.table('users', {
   id: uuid('id').primaryKey(),
   name: text('name'),
