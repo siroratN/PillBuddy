@@ -3,6 +3,12 @@ import { serial, text, pgTable, pgEnum, pgSchema, uuid, varchar, timestamp, inte
 
 export const mySchema = pgSchema("pillbuddy");
 
+const timestamps = {
+  updated_at: timestamp('updated_at'),
+  created_at: timestamp('created_at').defaultNow().notNull(),
+  deleted_at: timestamp('deleted_at'),
+}
+
 export const users = mySchema.table('users', {
   id: uuid('id').primaryKey(),
   name: text('name'),
@@ -55,12 +61,10 @@ export const medication_log = mySchema.table("medication_log", {
   status: medicationStatus('status').default('not_taken')
 })
 
-
-
-
-
-
 export type UserSchema = InferSelectModel<typeof users>
 export type PatientSchema = InferSelectModel<typeof patients>
 export type CaregiverSchema = InferSelectModel<typeof caregivers>
 export type MedicineSchema = InferSelectModel<typeof caregivers>
+export type ScheduleSchema = InferSelectModel<typeof schedules>
+export type ScheduleMedicinesSchema = InferSelectModel<typeof schedule_medicines>
+export type MedicationLogSchema = InferSelectModel<typeof medication_log>
