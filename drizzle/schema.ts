@@ -1,5 +1,5 @@
 import { InferSelectModel, max, min } from "drizzle-orm";
-import { serial, text, pgTable, pgEnum, pgSchema, uuid, varchar, timestamp, integer, primaryKey } from "drizzle-orm/pg-core";
+import { serial, text, pgTable, pgEnum, pgSchema, uuid, varchar, timestamp, integer, primaryKey, time, date } from "drizzle-orm/pg-core";
 
 export const mySchema = pgSchema("pillbuddy");
 
@@ -37,28 +37,33 @@ export const medicines = mySchema.table('medicines', {
   ...timestamps
 })
 
+const medicationStatus = pgEnum("status", ['taken', 'not_taken', 'postponed'])
 
 export const schedules = mySchema.table("scheduels", {
   id: serial("id").primaryKey(),
   patient_id: serial("patient_id").references(()=> patients.id),
   caregivers_id: serial("caregivers_id").references(()=> caregivers.id),
+  time: time('time').notNull(),
+  date: date('date').notNull(),
+  dosage_amount: integer('dosage_amount').notNull().default(1),
+  status: medicationStatus('status').default('not_taken'),
+  side_effects: text('side_effects')
 })
 
 export const schedule_medicines = mySchema.table("schedule_medicines", {
   schedule_id: serial('schedule_id').references(()=> schedules.id),
   medicines_id: serial('medicines_id').references(()=> medicines.id)
-}, table=>{
+}, table => {
   return {
     pk: primaryKey({ columns: [table.schedule_id, table.medicines_id]})
   }
 })
 
-export const medicationStatus = pgEnum("status", ['taken', 'not_taken', 'postponed'])
-
 export const medication_log = mySchema.table("medication_log", {
   id: uuid('id').primaryKey(),
   schedule_id: serial('schedule_id').references(()=> schedules.id),
   status: medicationStatus('status').default('not_taken')
+  
 })
 
 export type UserSchema = InferSelectModel<typeof users>
