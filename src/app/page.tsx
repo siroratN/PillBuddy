@@ -1,4 +1,5 @@
 'use server'
+import { Button } from '@/components/ui/button';
 import { db } from '../../drizzle/db';
 import { users } from '../../drizzle/schema';
 import { UserSchema } from '../../drizzle/schema';
@@ -8,7 +9,7 @@ export default async function HomePage() {
   const allUsers = await db.select().from(users);
 
   return (
-    <div>
+    <div className='h-[3000px]'>
       <h1>Users List</h1>
       <ul>
         {allUsers.map((user:UserSchema) => (
@@ -16,6 +17,7 @@ export default async function HomePage() {
             {user.id} - {user.name}
           </li>
         ))}
+        <Button variant={'secondary'}>Click me!</Button>
       </ul>
     </div>
   );
