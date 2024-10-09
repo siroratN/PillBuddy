@@ -11,8 +11,8 @@ export default async function DashboardPage() {
 
   return (
     <div className='mt-10 text-start max-w-xl mx-auto bg-neutral-200 p-5 rounded'>
-      <h1 className='text-4xl font-bold'>Welcome</h1>
-      <ul className='list-none mt-10'>
+      <h1 className='text-4xl font-bold text-center'>Welcome {user.firstName}</h1>
+      {/* <ul className='list-none mt-10'>
         <li className='mb-2'>
           <span className='font-semibold'>First Name:</span> {user.firstName}
         </li>
@@ -23,7 +23,7 @@ export default async function DashboardPage() {
           <span className='font-semibold'>Email:</span>{' '}
           {user.emailAddresses[0].emailAddress}
         </li>
-      </ul>
+      </ul> */}
     </div>
   );
 }
