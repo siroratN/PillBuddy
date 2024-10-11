@@ -8,7 +8,4 @@ import {users} from "./schema"
 const queryClient = postgres(process.env.DB_URL as string);
 export const db = drizzle(queryClient);
 
-export async function getFirstData(){
-    const user = await db.select().from(users)
-    console.log(user)
-}
+
