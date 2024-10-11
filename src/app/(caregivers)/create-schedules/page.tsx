@@ -1,11 +1,12 @@
+import CreateScheduleForm from '@/components/schedule/CreateScheduleForm'
 import React from 'react'
 
-const CreateSchedule = () => {
+const page = () => {
   return (
     <div>
-      
+      <CreateScheduleForm/>
     </div>
   )
 }
 
-export default CreateSchedule
+export default page
