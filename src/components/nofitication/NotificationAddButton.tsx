@@ -4,15 +4,11 @@ import { NotificationSchema } from '../../../drizzle/schema';
 import { useRouter } from 'next/navigation';
 import { Button } from '../ui/button';
 
-const NotificationAction = () => {
+const NotificationAddButton = () => {
   const router = useRouter()
   return (
-    <div className='flex justify-between w-full'>
-      <Button onClick={()=>{
-
-      }}>Create New</Button>
-    </div>
+    <Button onClick={()=>router.push('/notification/create')}>Add Nofitication</Button>
   )
 }
 
-export default NotificationAction
+export default NotificationAddButton

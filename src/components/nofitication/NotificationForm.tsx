@@ -29,7 +29,7 @@ import {
 import axios from 'axios';
 import { PatientSchema } from '../../../drizzle/schema';
 
-const CreateScheduleForm = () => {
+const NotificationForm = () => {
 	const scheduleSchema = z.object({
 		schedule_id: z.coerce.number().int(),
 		notification_time: z.string().time(),
@@ -147,4 +147,4 @@ const CreateScheduleForm = () => {
 	);
 };
 
-export default CreateScheduleForm;
+export default NotificationForm;
