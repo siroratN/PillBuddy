@@ -11,7 +11,7 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleSchema }) => {
 			key={schedule.id}
 			className="bg-gray-200 p-4 cursor-pointer"
 			onClick={() => {
-				return router.push(`/schedule-detail/${schedule.id}`);
+				return router.push(`/schedule/${schedule.id}`);
 			}}
 		>
 			<p>{schedule.caregivers_id}</p>

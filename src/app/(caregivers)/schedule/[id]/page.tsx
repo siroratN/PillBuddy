@@ -9,6 +9,9 @@ const page = async ({ params }: { params: { id: string } }) => {
 
 	return (
 		<div className="p-6">
+			<div>
+				
+			</div>
 			<div className="grid grid-cols-2 justify-items-center bg-gray-200 p-4 gap-y-4">
 				{notifications.map((notification: NotificationSchema) => (
 					<NotificationList key={notification.id} notification={notification} />
