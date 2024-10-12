@@ -1,6 +1,6 @@
 {
-  "id": "fabcbb94-f57c-46ef-bc67-25de40da9b18",
-  "prevId": "0a25c8d9-81a0-4bf1-a56a-1e0c1cfc40f4",
+  "id": "58507381-e17e-458e-9956-9281fc58303c",
+  "prevId": "3f047b2c-0e24-44cc-b39f-a002cb37c58d",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -116,6 +116,12 @@
           "type": "varchar(50)",
           "primaryKey": false,
           "notNull": true
+        },
+        "side_effects": {
+          "name": "side_effects",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         },
         "updated_at": {
           "name": "updated_at",
@@ -253,13 +259,6 @@
           "notNull": false,
           "default": "'morning'"
         },
-        "dosage_amount": {
-          "name": "dosage_amount",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "default": 1
-        },
         "sent_at": {
           "name": "sent_at",
           "type": "timestamp",
@@ -343,25 +342,11 @@
           "primaryKey": false,
           "notNull": true
         },
-        "date": {
-          "name": "date",
+        "start_date": {
+          "name": "start_date",
           "type": "date",
           "primaryKey": false,
           "notNull": true
-        },
-        "status": {
-          "name": "status",
-          "type": "status",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "'not_taken'"
-        },
-        "side_effects": {
-          "name": "side_effects",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
         }
       },
       "indexes": {},

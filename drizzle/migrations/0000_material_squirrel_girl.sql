@@ -1,8 +1,4 @@
-DO $$ BEGIN
- CREATE TYPE "public"."status" AS ENUM('taken', 'not_taken', 'postponed');
-EXCEPTION
- WHEN duplicate_object THEN null;
-END $$;
+CREATE SCHEMA "pillbuddy";
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "pillbuddy"."caregivers" (
 	"id" serial PRIMARY KEY NOT NULL,
@@ -28,6 +24,23 @@ CREATE TABLE IF NOT EXISTS "pillbuddy"."medicines" (
 	"deleted_at" timestamp
 );
 --> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "pillbuddy"."notification_medicines" (
+	"notification_id" serial NOT NULL,
+	"medicines_id" serial NOT NULL,
+	"amount" integer DEFAULT 1 NOT NULL,
+	CONSTRAINT "notification_medicines_notification_id_medicines_id_pk" PRIMARY KEY("notification_id","medicines_id")
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "pillbuddy"."notifications" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"schedule_id" serial NOT NULL,
+	"notification_time" time NOT NULL,
+	"notification_status" "notification_status" DEFAULT 'pending',
+	"meal" "meal" DEFAULT 'morning',
+	"dosage_amount" integer DEFAULT 1 NOT NULL,
+	"sent_at" timestamp
+);
+--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "pillbuddy"."patients" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"name" varchar(200) NOT NULL,
@@ -35,16 +48,18 @@ CREATE TABLE IF NOT EXISTS "pillbuddy"."patients" (
 	"contact_info" text
 );
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "pillbuddy"."schedule_medicines" (
-	"schedule_id" serial NOT NULL,
-	"medicines_id" serial NOT NULL,
-	CONSTRAINT "schedule_medicines_schedule_id_medicines_id_pk" PRIMARY KEY("schedule_id","medicines_id")
-);
---> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "pillbuddy"."scheduels" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"patient_id" serial NOT NULL,
-	"caregivers_id" serial NOT NULL
+	"caregivers_id" serial NOT NULL,
+	"date" date NOT NULL,
+	"status" "status" DEFAULT 'not_taken',
+	"side_effects" text
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "pillbuddy"."users" (
+	"id" uuid PRIMARY KEY NOT NULL,
+	"name" text
 );
 --> statement-breakpoint
 DO $$ BEGIN
@@ -54,13 +69,19 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "pillbuddy"."schedule_medicines" ADD CONSTRAINT "schedule_medicines_schedule_id_scheduels_id_fk" FOREIGN KEY ("schedule_id") REFERENCES "pillbuddy"."scheduels"("id") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "pillbuddy"."notification_medicines" ADD CONSTRAINT "notification_medicines_notification_id_notifications_id_fk" FOREIGN KEY ("notification_id") REFERENCES "pillbuddy"."notifications"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "pillbuddy"."schedule_medicines" ADD CONSTRAINT "schedule_medicines_medicines_id_medicines_id_fk" FOREIGN KEY ("medicines_id") REFERENCES "pillbuddy"."medicines"("id") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "pillbuddy"."notification_medicines" ADD CONSTRAINT "notification_medicines_medicines_id_medicines_id_fk" FOREIGN KEY ("medicines_id") REFERENCES "pillbuddy"."medicines"("id") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "pillbuddy"."notifications" ADD CONSTRAINT "notifications_schedule_id_scheduels_id_fk" FOREIGN KEY ("schedule_id") REFERENCES "pillbuddy"."scheduels"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
