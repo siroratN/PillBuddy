@@ -20,9 +20,10 @@ export async function POST(req: NextRequest, res: NextResponse) {
 		.values({
 			meal: form.meal,
 			notification_time: form.notification_time,
-			schedule_id: form.schedule_id,
-		});
+			schedule_id: 1,
+		})
+		.returning();
 	console.log(notification)
 
-	return NextResponse.json({ ok: true }, { status: 200 });
+	return NextResponse.json({ ok: notification }, { status: 200 });
 }

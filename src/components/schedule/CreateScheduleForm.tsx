@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -26,7 +26,8 @@ import {
 	SelectValue,
 } from '@/components/ui/select';
 
-import axios from 'axios'
+import axios from 'axios';
+import { PatientSchema } from '../../../drizzle/schema';
 
 const CreateScheduleForm = () => {
 	const scheduleSchema = z.object({
@@ -41,10 +42,13 @@ const CreateScheduleForm = () => {
 	});
 
 	const onSubmit = async (values: z.infer<typeof scheduleSchema>) => {
-		console.log(values)
-		await axios.post(`/api/schedule`, values)
-			.then(data => console.log(data))
+		await axios.post(`/api/schedule`, values).then((data) => console.log(data));
 	};
+
+	const [patients, setPatients] = useState<PatientSchema[]>([]);
+	useEffect(() => {
+		axios.get('/api/patients').then((res) => setPatients(res.data));
+	}, []);
 
 	return (
 		<div className="max-w-lg">
@@ -63,12 +67,12 @@ const CreateScheduleForm = () => {
 										</SelectTrigger>
 										<SelectContent>
 											<SelectGroup>
-												<SelectLabel>Fruits</SelectLabel>
-												<SelectItem value="1">Apple</SelectItem>
-												<SelectItem value="banana">Banana</SelectItem>
-												<SelectItem value="blueberry">Blueberry</SelectItem>
-												<SelectItem value="grapes">Grapes</SelectItem>
-												<SelectItem value="pineapple">Pineapple</SelectItem>
+												<SelectLabel>Patients</SelectLabel>
+												{patients.map((patient) => (
+													<SelectItem key={patient.id} value={patient.id + ''}>
+														{patient.name}
+													</SelectItem>
+												))}
 											</SelectGroup>
 										</SelectContent>
 									</Select>
@@ -84,7 +88,12 @@ const CreateScheduleForm = () => {
 							<FormItem>
 								<FormLabel>Time</FormLabel>
 								<FormControl>
-									<Input type="time" step={1} onChange={field.onChange} defaultValue={field.value} />
+									<Input
+										type="time"
+										step={1}
+										onChange={field.onChange}
+										defaultValue={field.value}
+									/>
 								</FormControl>
 								<FormMessage />
 							</FormItem>
@@ -98,7 +107,7 @@ const CreateScheduleForm = () => {
 							<FormItem>
 								<FormLabel>Dosage amount</FormLabel>
 								<FormControl>
-									<Input type="number" onChange={field.onChange} defaultValue={field.value}/>
+									<Input type="number" onChange={field.onChange} defaultValue={field.value} />
 								</FormControl>
 								<FormMessage />
 							</FormItem>
