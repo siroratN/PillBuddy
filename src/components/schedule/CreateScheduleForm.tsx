@@ -15,39 +15,86 @@ import {
 
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
-import { Calendar } from '@/components/ui/calendar';
-import { CalendarIcon } from 'lucide-react';
-import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
-import { cn } from '@/lib/utils';
-import { format } from "date-fns"
+
+import {
+	Select,
+	SelectContent,
+	SelectGroup,
+	SelectItem,
+	SelectLabel,
+	SelectTrigger,
+	SelectValue,
+} from '@/components/ui/select';
 
 const CreateScheduleForm = () => {
 	const scheduleSchema = z.object({
-		patient_id: z.coerce.number().int(),
-		caregivers_id: z.coerce.number().int(),
-		time: z.string().time(),
-		date: z.date(),
-		dosage_amount: z.coerce.number().gt(0),
-		status: z.enum(['taken', 'not_taken', 'postponed']),
-		side_effects: z.string().nullable(),
+		schedule_id: z.coerce.number().int(),
+		notification_time: z.string().time(),
+		dosage_amount: z.coerce.number().int().gt(0),
+		meal: z.enum(['morning', 'afternoon', 'evening', 'bedtime']),
 	});
 
 	const form = useForm<z.infer<typeof scheduleSchema>>({
 		resolver: zodResolver(scheduleSchema),
 	});
 
+	const onSubmit = (values: z.infer<typeof scheduleSchema>) => {
+		console.log(values)
+	};
+
 	return (
-		<div className='max-w-lg'>
+		<div className="max-w-lg">
 			<Form {...form}>
-				<form action="">
+				<form action="" onSubmit={form.handleSubmit(onSubmit)}>
 					<FormField
 						control={form.control}
-						name="time"
+						name="schedule_id"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Patient</FormLabel>
+								<FormControl>
+									<Select onValueChange={field.onChange} defaultValue="field.value">
+										<SelectTrigger className="w-[180px]">
+											<SelectValue placeholder="Select a fruit" />
+										</SelectTrigger>
+										<SelectContent>
+											<SelectGroup>
+												<SelectLabel>Fruits</SelectLabel>
+												<SelectItem value="1">Apple</SelectItem>
+												<SelectItem value="banana">Banana</SelectItem>
+												<SelectItem value="blueberry">Blueberry</SelectItem>
+												<SelectItem value="grapes">Grapes</SelectItem>
+												<SelectItem value="pineapple">Pineapple</SelectItem>
+											</SelectGroup>
+										</SelectContent>
+									</Select>
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+					<FormField
+						control={form.control}
+						name="notification_time"
 						render={({ field }) => (
 							<FormItem>
 								<FormLabel>Time</FormLabel>
 								<FormControl>
-									<Input {...field} />
+									<Input type="time" step={1} onChange={field.onChange} defaultValue={field.value} />
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+
+					<FormField
+						control={form.control}
+						name="dosage_amount"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Dosage amount</FormLabel>
+								<FormControl>
+									<Input type="number" onChange={field.onChange} defaultValue={field.value}/>
 								</FormControl>
 								<FormMessage />
 							</FormItem>
@@ -55,67 +102,29 @@ const CreateScheduleForm = () => {
 					/>
 					<FormField
 						control={form.control}
-						name="date"
+						name="meal"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>Date</FormLabel>
+								<FormLabel>Meal</FormLabel>
 								<FormControl>
-									<Popover>
-										<PopoverTrigger asChild>
-											<FormControl>
-												<Button
-													variant={'outline'}
-													className={cn(
-														'w-[240px] pl-3 text-left font-normal',
-														!field.value && 'text-muted-foreground'
-													)}
-												>
-													{field.value ? format(field.value, 'PPP') : <span>Pick a date</span>}
-													<CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-												</Button>
-											</FormControl>
-										</PopoverTrigger>
-										<PopoverContent className="w-auto p-0" align="start">
-											<Calendar
-												mode="single"
-												selected={field.value}
-												onSelect={field.onChange}
-												disabled={(date) => date < new Date()}
-												initialFocus
-											/>
-										</PopoverContent>
-									</Popover>
+									<Select onValueChange={field.onChange} defaultValue="field.value">
+										<SelectTrigger className="w-[180px]">
+											<SelectValue placeholder="Select a fruit" />
+										</SelectTrigger>
+										<SelectContent>
+											<SelectGroup>
+												<SelectItem value="morning">Morning</SelectItem>
+												<SelectItem value="afternoon">Afternoon</SelectItem>
+												<SelectItem value="evening">Evening</SelectItem>
+												<SelectItem value="bedtime">Bedtime</SelectItem>
+											</SelectGroup>
+										</SelectContent>
+									</Select>
 								</FormControl>
 								<FormMessage />
 							</FormItem>
 						)}
 					/>
-                    <FormField
-                        control={form.control}
-                        name='dosage_amount'
-                        render={({field})=>(
-                            <FormItem>
-								<FormLabel>Dosage amount</FormLabel>
-								<FormControl>
-									<Input type='number' {...field} />
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-                        )}
-                    />
-                     <FormField
-                        control={form.control}
-                        name='status'
-                        render={({field})=>(
-                            <FormItem>
-								<FormLabel>Status</FormLabel>
-								<FormControl>
-									<Input type='number' {...field} />
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-                        )}
-                    />
 					<Button type="submit">submit</Button>
 				</form>
 			</Form>

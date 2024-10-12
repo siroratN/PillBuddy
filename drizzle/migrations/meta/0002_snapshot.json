@@ -1,6 +1,6 @@
 {
-  "id": "4022c455-f0b1-486c-8f94-0f34aed52ac0",
-  "prevId": "a6ab6514-f76c-4c02-8a16-a71172083e5e",
+  "id": "36782b2d-0dbf-4c52-add8-0c698546d757",
+  "prevId": "fabcbb94-f57c-46ef-bc67-25de40da9b18",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -142,6 +142,144 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
+    "pillbuddy.notification_medicines": {
+      "name": "notification_medicines",
+      "schema": "pillbuddy",
+      "columns": {
+        "notification_id": {
+          "name": "notification_id",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "medicines_id": {
+          "name": "medicines_id",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "amount": {
+          "name": "amount",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 1
+        },
+        "dosage_amount": {
+          "name": "dosage_amount",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 1
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "notification_medicines_notification_id_notifications_id_fk": {
+          "name": "notification_medicines_notification_id_notifications_id_fk",
+          "tableFrom": "notification_medicines",
+          "tableTo": "notifications",
+          "schemaTo": "pillbuddy",
+          "columnsFrom": [
+            "notification_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "notification_medicines_medicines_id_medicines_id_fk": {
+          "name": "notification_medicines_medicines_id_medicines_id_fk",
+          "tableFrom": "notification_medicines",
+          "tableTo": "medicines",
+          "schemaTo": "pillbuddy",
+          "columnsFrom": [
+            "medicines_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "notification_medicines_notification_id_medicines_id_pk": {
+          "name": "notification_medicines_notification_id_medicines_id_pk",
+          "columns": [
+            "notification_id",
+            "medicines_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "pillbuddy.notifications": {
+      "name": "notifications",
+      "schema": "pillbuddy",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "schedule_id": {
+          "name": "schedule_id",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "notification_time": {
+          "name": "notification_time",
+          "type": "time",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "notification_status": {
+          "name": "notification_status",
+          "type": "notification_status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'pending'"
+        },
+        "meal": {
+          "name": "meal",
+          "type": "meal",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'morning'"
+        },
+        "sent_at": {
+          "name": "sent_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "notifications_schedule_id_scheduels_id_fk": {
+          "name": "notifications_schedule_id_scheduels_id_fk",
+          "tableFrom": "notifications",
+          "tableTo": "scheduels",
+          "schemaTo": "pillbuddy",
+          "columnsFrom": [
+            "schedule_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
     "pillbuddy.patients": {
       "name": "patients",
       "schema": "pillbuddy",
@@ -176,65 +314,6 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "pillbuddy.schedule_medicines": {
-      "name": "schedule_medicines",
-      "schema": "pillbuddy",
-      "columns": {
-        "schedule_id": {
-          "name": "schedule_id",
-          "type": "serial",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "medicines_id": {
-          "name": "medicines_id",
-          "type": "serial",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "schedule_medicines_schedule_id_scheduels_id_fk": {
-          "name": "schedule_medicines_schedule_id_scheduels_id_fk",
-          "tableFrom": "schedule_medicines",
-          "tableTo": "scheduels",
-          "schemaTo": "pillbuddy",
-          "columnsFrom": [
-            "schedule_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "schedule_medicines_medicines_id_medicines_id_fk": {
-          "name": "schedule_medicines_medicines_id_medicines_id_fk",
-          "tableFrom": "schedule_medicines",
-          "tableTo": "medicines",
-          "schemaTo": "pillbuddy",
-          "columnsFrom": [
-            "medicines_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {
-        "schedule_medicines_schedule_id_medicines_id_pk": {
-          "name": "schedule_medicines_schedule_id_medicines_id_pk",
-          "columns": [
-            "schedule_id",
-            "medicines_id"
-          ]
-        }
-      },
-      "uniqueConstraints": {}
-    },
     "pillbuddy.scheduels": {
       "name": "scheduels",
       "schema": "pillbuddy",
@@ -257,24 +336,11 @@
           "primaryKey": false,
           "notNull": true
         },
-        "time": {
-          "name": "time",
-          "type": "time",
-          "primaryKey": false,
-          "notNull": true
-        },
         "date": {
           "name": "date",
           "type": "date",
           "primaryKey": false,
           "notNull": true
-        },
-        "dosage_amount": {
-          "name": "dosage_amount",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "default": 1
         },
         "status": {
           "name": "status",

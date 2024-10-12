@@ -34,6 +34,7 @@ export const medicines = mySchema.table('medicines', {
   dosage: varchar('dosage'),
   instructions: text('instructions'),
   type: varchar('type', {length: 50}).notNull(),
+  side_effects: text('side_effects'),
   ...timestamps
 })
 
@@ -43,19 +44,17 @@ export const schedules = mySchema.table("scheduels", {
   id: serial("id").primaryKey(),
   patient_id: serial("patient_id").references(()=> patients.id),
   caregivers_id: serial("caregivers_id").references(()=> caregivers.id),
-  time: time('time').notNull(),
-  date: date('date').notNull(),
-  dosage_amount: integer('dosage_amount').notNull().default(1),
-  status: medicationStatus('status').default('not_taken'),
-  side_effects: text('side_effects')
+  start_date: date('start_date').notNull(),
 })
 
-export const schedule_medicines = mySchema.table("schedule_medicines", {
-  schedule_id: serial('schedule_id').references(()=> schedules.id),
-  medicines_id: serial('medicines_id').references(()=> medicines.id)
+export const notification_medicines = mySchema.table("notification_medicines", {
+  notification_id: serial('notification_id').references(()=> notifications.id),
+  medicines_id: serial('medicines_id').references(()=> medicines.id),
+  amount: integer('amount').notNull().default(1),
+  dosage_amount: integer('dosage_amount').notNull().default(1),
 }, table => {
   return {
-    pk: primaryKey({ columns: [table.schedule_id, table.medicines_id]})
+    pk: primaryKey({ columns: [table.notification_id, table.medicines_id]})
   }
 })
 
@@ -63,13 +62,25 @@ export const medication_log = mySchema.table("medication_log", {
   id: uuid('id').primaryKey(),
   schedule_id: serial('schedule_id').references(()=> schedules.id),
   status: medicationStatus('status').default('not_taken')
-  
 })
+
+const notificationStatus = pgEnum("notification_status", ['pending', 'sent'])
+const meal = pgEnum("meal", ['morning', 'afternoon', 'evening', 'bedtime'])
+
+export const notifications = mySchema.table('notifications', {
+  id: serial('id').primaryKey(),
+  schedule_id: serial('schedule_id').references(() => schedules.id),
+  notification_time: time('notification_time').notNull(),
+  notification_status: notificationStatus('notification_status').default('pending'),
+  meal: meal('meal').default("morning"),
+  sent_at: timestamp('sent_at')
+});
 
 export type UserSchema = InferSelectModel<typeof users>
 export type PatientSchema = InferSelectModel<typeof patients>
 export type CaregiverSchema = InferSelectModel<typeof caregivers>
 export type MedicineSchema = InferSelectModel<typeof caregivers>
 export type ScheduleSchema = InferSelectModel<typeof schedules>
-export type ScheduleMedicinesSchema = InferSelectModel<typeof schedule_medicines>
+export type NotificationMedicinesSchema = InferSelectModel<typeof notification_medicines>
 export type MedicationLogSchema = InferSelectModel<typeof medication_log>
+export type NotificationSchema = InferSelectModel<typeof notifications>

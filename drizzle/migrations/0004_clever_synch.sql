@@ -1,0 +1,1 @@
+ALTER TABLE "pillbuddy"."scheduels" RENAME COLUMN "date" TO "start_date";

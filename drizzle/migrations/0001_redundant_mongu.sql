@@ -1,0 +1,1 @@
+ALTER TABLE "pillbuddy"."notification_medicines" ADD COLUMN "dosage_amount" integer DEFAULT 1 NOT NULL;

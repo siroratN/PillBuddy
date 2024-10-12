@@ -1,0 +1,1 @@
+ALTER TABLE "pillbuddy"."notifications" DROP COLUMN IF EXISTS "dosage_amount";
