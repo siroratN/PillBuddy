@@ -20,7 +20,6 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
 	const user = auth()
-
 	return (
 		<html lang="en">
 			<body className={cn('min-h-screen, bg-background antialiased', inter.className)}>
