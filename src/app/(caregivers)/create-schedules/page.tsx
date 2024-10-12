@@ -6,7 +6,7 @@ import { PatientSchema } from '../../../../drizzle/schema';
 
 const page = async () => {
 	return (
-		<div>
+		<div className='px-6'>
 			<CreateScheduleForm/>
 		</div>
 	);

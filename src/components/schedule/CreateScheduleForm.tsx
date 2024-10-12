@@ -51,15 +51,16 @@ const CreateScheduleForm = () => {
 	}, []);
 
 	return (
-		<div className="max-w-lg">
+		<div className="max-w-lg mx-auto mt-10">
+			<h1 className='text-center text-2xl mt-4'>สร้างการแจ้งเตือน</h1>
 			<Form {...form}>
-				<form action="" onSubmit={form.handleSubmit(onSubmit)}>
+				<form action="" onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col gap-4'>
 					<FormField
 						control={form.control}
 						name="schedule_id"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>Patient</FormLabel>
+								<FormLabel className='text-lg'>Patient</FormLabel>
 								<FormControl>
 									<Select onValueChange={field.onChange} defaultValue="field.value">
 										<SelectTrigger className="w-[180px]">
@@ -86,13 +87,14 @@ const CreateScheduleForm = () => {
 						name="notification_time"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>Time</FormLabel>
+								<FormLabel className='text-lg'>Time</FormLabel>
 								<FormControl>
 									<Input
 										type="time"
 										step={1}
 										onChange={field.onChange}
 										defaultValue={field.value}
+										className='w-fit'
 									/>
 								</FormControl>
 								<FormMessage />
@@ -105,9 +107,9 @@ const CreateScheduleForm = () => {
 						name="dosage_amount"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>Dosage amount</FormLabel>
+								<FormLabel className='text-lg'>Dosage amount</FormLabel>
 								<FormControl>
-									<Input type="number" onChange={field.onChange} defaultValue={field.value} />
+									<Input type="number" onChange={field.onChange} defaultValue={field.value} className='w-16'/>
 								</FormControl>
 								<FormMessage />
 							</FormItem>
@@ -118,7 +120,7 @@ const CreateScheduleForm = () => {
 						name="meal"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>Meal</FormLabel>
+								<FormLabel className='text-lg'>Meal</FormLabel>
 								<FormControl>
 									<Select onValueChange={field.onChange} defaultValue="field.value">
 										<SelectTrigger className="w-[180px]">
@@ -138,7 +140,7 @@ const CreateScheduleForm = () => {
 							</FormItem>
 						)}
 					/>
-					<Button type="submit">submit</Button>
+					<Button type="submit" className='mt-4 w-24'>Submit</Button>
 				</form>
 			</Form>
 		</div>
