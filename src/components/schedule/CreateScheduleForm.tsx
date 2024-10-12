@@ -26,6 +26,8 @@ import {
 	SelectValue,
 } from '@/components/ui/select';
 
+import axios from 'axios'
+
 const CreateScheduleForm = () => {
 	const scheduleSchema = z.object({
 		schedule_id: z.coerce.number().int(),
@@ -38,8 +40,10 @@ const CreateScheduleForm = () => {
 		resolver: zodResolver(scheduleSchema),
 	});
 
-	const onSubmit = (values: z.infer<typeof scheduleSchema>) => {
+	const onSubmit = async (values: z.infer<typeof scheduleSchema>) => {
 		console.log(values)
+		await axios.post(`/api/schedule`, values)
+			.then(data => console.log(data))
 	};
 
 	return (
