@@ -7,6 +7,8 @@ import { UserSchema } from '../../drizzle/schema';
 export default async function HomePage() {
   // Query ข้อมูลจากตาราง users
   const allUsers = await db.select().from(users);
+  const currentTime = new Date().toTimeString().split(' ')[0]; // ดึงเวลาปัจจุบันในรูปแบบ HH:MM:SS
+  console.log(currentTime)
 
   return (
     <div className='h-[3000px]'>

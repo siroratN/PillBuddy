@@ -4,11 +4,13 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "devcron": "concurrently \"next dev\" \"ts-node -r tsconfig-paths/register cron.ts\"",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "migrate": "pnpm ts-node --esm ./src/drizzle/migrate.ts"
   },
+  "type": "module",
   "dependencies": {
     "@clerk/nextjs": "^5.7.1",
     "@hookform/resolvers": "^3.9.0",
@@ -20,10 +22,12 @@
     "axios": "^1.7.7",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "concurrently": "^9.0.1",
     "date-fns": "^2.30.0",
     "drizzle-orm": "^0.33.0",
     "lucide-react": "^0.447.0",
     "next": "14.2.14",
+    "node-cron": "^3.0.3",
     "postgres": "^3.4.4",
     "react": "^18",
     "react-day-picker": "8.10.1",
@@ -31,11 +35,11 @@
     "react-hook-form": "^7.53.0",
     "tailwind-merge": "^2.5.3",
     "tailwindcss-animate": "^1.0.7",
-    "ts-node": "^10.9.2",
     "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/node": "^20.16.10",
+    "@types/node-cron": "^3.0.11",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "drizzle-kit": "^0.24.2",
@@ -43,6 +47,8 @@
     "eslint-config-next": "14.2.14",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.6.2"
   }
 }

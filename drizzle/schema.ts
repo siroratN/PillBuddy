@@ -60,6 +60,8 @@ export const schedules = mySchema.table('scheduels', {
 	start_date: date('start_date').notNull(),
 });
 
+// noti -> schedules
+
 export const notification_medicines = mySchema.table(
 	'notification_medicines',
 	{
@@ -88,26 +90,6 @@ export const notifications = mySchema.table('notifications', {
 	sent_at: timestamp('sent_at'),
 });
 
-// relations
-
-export const notificationRelations = relations(notifications, ({ one }) => ({
-	schedule: one(schedules, {
-		fields: [notifications.schedule_id],
-		references: [schedules.id],
-	}),
-}));
-
-export const scheduleRelations = relations(schedules, ({ one, many }) => ({
-	patient: one(patients, {
-		fields: [schedules.patient_id],
-		references: [patients.id],
-	}),
-}));
-
-export const NotificationMedicinesRelations = relations(notifications, ({ many }) => ({
-	medicines: many(medicines),
-	notifications: many(notifications),
-}));
 
 export type UserSchema = InferSelectModel<typeof users>;
 export type PatientSchema = InferSelectModel<typeof patients>;

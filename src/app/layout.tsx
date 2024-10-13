@@ -7,6 +7,7 @@ import Navbar from '@/components/Navbar';
 import Header from '@/components/ui/header';
 import { auth, currentUser } from '@clerk/nextjs/server';
 import { useEffect } from 'react';
+import axios from 'axios';
 
 const inter = Inter({ subsets: ['latin'] });
 export const metadata: Metadata = {
@@ -20,6 +21,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
 	const user = auth()
+	const schedule = await axios.get("http://localhost:3000/api/task")
 	return (
 		<html lang="en">
 			<body className={cn('min-h-screen, bg-background antialiased', inter.className)}>

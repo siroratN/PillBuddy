@@ -10,3 +10,15 @@ export default clerkMiddleware();
 export const config = {
   matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
 };
+
+// let interval: NodeJS.Timeout | null = null;
+
+
+// if (!interval) {
+//   interval = setInterval(() => {
+//     console.log('Task is running every minute!');
+
+//     // ส่ง notification
+    
+//   }, 60); // 1 minute
+// }
