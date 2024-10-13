@@ -5,7 +5,7 @@ import NotificationList from '@/components/nofitication/NotificationList';
 import AddButton from '@/components/nofitication/AddButton';
 
 const page = async ({ params }: { params: { id: string } }) => {
-	const res = await axios.get(`${process.env.URL}/api/notifications/${params.id}`);
+	const res = await axios.get(`${process.env.NEXT_PUBLIC_URL}/api/notifications/${params.id}`);
 	const notifications = res.data.data;
 
 	return (
