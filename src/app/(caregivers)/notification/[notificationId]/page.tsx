@@ -9,7 +9,7 @@ import MedicineForm from '@/components/medicine/MedicineForm';
 import AddMedicine from '@/components/medicine/AddMedicine';
 
 const page = async ({ params }: { params: { notificationId: string } }) => {
-	const res = await axios.get(`${process.env.URL}/api/medicines/${params.notificationId}`);
+	const res = await axios.get(`${process.env.NEXT_PUBLIC_URL}/api/medicines/${params.notificationId}`);
 	const medicines = res.data.data;
 	return (
 		<div className="p-6">
