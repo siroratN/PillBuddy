@@ -10,20 +10,30 @@ export function cn(...inputs: ClassValue[]) {
 
 // Find your Account SID and Auth Token at twilio.com/console
 // and set the environment variables. See http://twil.io/secure
-const accountSid = process.env.NEXT_PUBLIC_TWILIO_ACCOUNT_SID;
-const authToken = process.env.NEXT_PUBLIC_TWILIO_AUTH_TOKEN;
-export const client = twilio(accountSid, authToken);
 
 
-export async function createMessage(to:string, body:string) {
-	const message = await client.messages.create({
-		body: body,
-		from: '+19093435505',
-		to: to,
-	});
 
-	console.log(message.body);
+export function createScheduledDateTime(hour: number, minute: number) {
+	const now = new Date(); // สร้าง Date สำหรับวันที่ปัจจุบัน
+	const scheduledDateTime = new Date(
+		now.getFullYear(),
+		now.getMonth(),
+		now.getDate(),
+		hour,
+		minute,
+		0 // ตั้งวินาทีเป็น 0
+	);
+
+	return scheduledDateTime;
 }
 
 
+export const getCurrentTime = (): string => {
+    const now = new Date();
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+
+    return `${hours}:${minutes}:${seconds}`;
+};
 // export const url = 'localhost:3000'

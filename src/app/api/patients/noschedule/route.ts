@@ -5,5 +5,6 @@ import { ScheduleSchema, NotificationSchema, PatientSchema } from '../../../../.
 
 export async function GET(req: NextRequest, res: NextResponse) {
 	const allPatients = await db.select().from(patients);
+	
 	return NextResponse.json({ data: allPatients, ok: true }, { status: 200 });
 }

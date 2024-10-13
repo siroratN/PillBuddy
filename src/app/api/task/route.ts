@@ -1,18 +1,48 @@
-import { client } from '@/lib/utils';
+import {createScheduledDateTime, getCurrentTime } from '@/lib/utils';
 import { NextRequest, NextResponse } from 'next/server';
+import { db } from '../../../../drizzle/db';
+import { notification_medicines, notifications, patients, schedules } from '../../../../drizzle/schema';
+import { eq } from 'drizzle-orm';
+import { client } from '@/lib/twilio';
 
-async function createMessage() {
+
+export async function createMessage(to: string, body: string) {
 	const message = await client.messages.create({
-		body: 'This is the ship that made the Kessel Run in fourteen parsecs?',
+		body: body,
 		from: '+19093435505',
-		to: '+66917584445',
+		to: to,
 	});
 
 	console.log(message.body);
 }
 
 export async function GET(req: NextRequest, res: NextResponse) {
-	createMessage();
+	// createMessage("+66917584445", "Hi james from the future!");
+	// createMessage("+66917584445", "Hi james from the future!");
+
+ const eachUserNotifications = await db
+        .select({
+            patientName: patients.name,        // ดึงชื่อผู้ป่วย
+			patientPhone: patients.phone_number,
+            scheduleId: schedules.id,          // ดึง ID ตาราง schedule
+            notificationTime: notifications.notification_time,  // เวลาที่ต้องแจ้งเตือน
+            notificationStatus: notifications.notification_status,  // สถานะการแจ้งเตือน
+            meal: notifications.meal,          // มื้ออาหารที่เกี่ยวข้อง
+            sentAt: notifications.sent_at      // เวลาที่ส่งแจ้งเตือน
+        })
+        .from(notifications)
+        .leftJoin(schedules, eq(schedules.id, notifications.schedule_id))
+        .leftJoin(patients, eq(patients.id, schedules.patient_id));  // Join ตาราง schedules กับ patients เพื่อดึงข้อมูลของทุกคน
+
+
+
+		eachUserNotifications.forEach(noti=>{
+			if(noti.notificationTime == getCurrentTime()){
+				createMessage(noti.patientPhone || "+66917584445", `Time to take your medicine! Stay healthy and follow your schedule.`)
+			}
+		})
+
+		console.log(eachUserNotifications)
 
 	return NextResponse.json(
 		{

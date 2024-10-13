@@ -47,7 +47,7 @@ const NotificationForm = () => {
 
 	const [patients, setPatients] = useState<PatientSchema[]>([]);
 	useEffect(() => {
-		axios.get('/api/patients').then((res) => setPatients(res.data));
+		axios.get('/api/patients').then((res) => setPatients(res.data.data));
 	}, []);
 
 	return (

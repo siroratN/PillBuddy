@@ -34,6 +34,7 @@ export const patients = mySchema.table('patients', {
 	name: varchar('name', { length: 200 }).notNull(),
 	age: integer('age').notNull(),
 	contact_info: text('contact_info'),
+	phone_number: text("phone_number")
 });
 
 export const caregivers = mySchema.table('caregivers', {
