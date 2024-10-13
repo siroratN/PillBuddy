@@ -63,16 +63,11 @@ export const schedules = mySchema.table('scheduels', {
 export const notification_medicines = mySchema.table(
 	'notification_medicines',
 	{
+		id: serial('id').primaryKey(),
 		notification_id: serial('notification_id').references(() => notifications.id),
-		medicines_id: serial('medicines_id').references(() => medicines.id),
-		amount: integer('amount').notNull().default(1),
+		medicine_id: serial('medicine_id').references(() => medicines.id),
 		dosage_amount: integer('dosage_amount').notNull().default(1),
 	},
-	(table) => {
-		return {
-			pk: primaryKey({ columns: [table.notification_id, table.medicines_id] }),
-		};
-	}
 );
 
 export const medication_log = mySchema.table('medication_log', {

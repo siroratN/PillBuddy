@@ -13,17 +13,3 @@ export async function GET(req: NextRequest, res: NextResponse) {
 	});
 }
 
-export async function POST(req: NextRequest, res: NextResponse) {
-	const form: NotificationSchema = await req.json();
-	const notification = await db
-		.insert(notifications)
-		.values({
-			meal: form.meal,
-			notification_time: form.notification_time,
-			schedule_id: 1,
-		})
-		.returning();
-	console.log(notification)
-
-	return NextResponse.json({ ok: notification }, { status: 200 });
-}

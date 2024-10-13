@@ -42,7 +42,7 @@ const NotificationForm = () => {
 	});
 
 	const onSubmit = async (values: z.infer<typeof scheduleSchema>) => {
-		await axios.post(`/api/schedule`, values).then((data) => console.log(data));
+		await axios.post(`/api/notifications`, values).then((data) => console.log(data));
 	};
 
 	const [patients, setPatients] = useState<PatientSchema[]>([]);
