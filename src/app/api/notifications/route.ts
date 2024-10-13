@@ -5,14 +5,6 @@ import { ScheduleSchema } from '../../../../drizzle/schema';
 import { NotificationSchema } from '../../../../drizzle/schema';
 import { notifications } from '../../../../drizzle/schema';
 
-export async function GET(req: NextRequest, res: NextResponse) {
-	const allSchedules = await db.select().from(schedules);
-
-	return NextResponse.json({
-		allSchedules,
-	});
-}
-
 export async function POST(req: NextRequest, res: NextResponse) {
 	const form: NotificationSchema = await req.json();
 	const notification = await db

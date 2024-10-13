@@ -29,7 +29,7 @@ import {
 import axios from 'axios';
 import { PatientSchema } from '../../../drizzle/schema';
 
-const CreateScheduleForm = () => {
+const NotificationForm = () => {
 	const scheduleSchema = z.object({
 		schedule_id: z.coerce.number().int(),
 		notification_time: z.string().time(),
@@ -42,7 +42,7 @@ const CreateScheduleForm = () => {
 	});
 
 	const onSubmit = async (values: z.infer<typeof scheduleSchema>) => {
-		await axios.post(`/api/schedule`, values).then((data) => console.log(data));
+		await axios.post(`/api/notifications`, values).then((data) => console.log(data));
 	};
 
 	const [patients, setPatients] = useState<PatientSchema[]>([]);
@@ -147,4 +147,4 @@ const CreateScheduleForm = () => {
 	);
 };
 
-export default CreateScheduleForm;
+export default NotificationForm;
