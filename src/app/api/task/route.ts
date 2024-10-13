@@ -12,9 +12,9 @@ import twilio from 'twilio';
 
 const accountSid = process.env.NEXT_PUBLIC_TWILIO_ACCOUNT_SID;
 const authToken = process.env.NEXT_PUBLIC_TWILIO_AUTH_TOKEN;
-export const client = twilio(accountSid, authToken);
+const client = twilio(accountSid, authToken);
 
-export async function createMessage(to: string, body: string) {
+async function createMessage(to: string, body: string) {
 	const message = await client.messages.create({
 		body: body,
 		from: '+19093435505',
@@ -46,7 +46,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
 		if (noti.notificationTime.slice(0, -3) == getCurrentTime().slice(0, -3)) {
 			createMessage(
 				noti.patientPhone || '+66917584445',
-				`Time to take your medicine! Stay healthy and follow your schedule.`
+				`Time to take your medicine! Stay healthy and follow your schedule. \n`
 			);
 		}
 	});
