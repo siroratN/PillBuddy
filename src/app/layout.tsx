@@ -7,6 +7,7 @@ import Navbar from '@/components/Navbar';
 import Header from '@/components/ui/header';
 import { auth, currentUser } from '@clerk/nextjs/server';
 import { useEffect } from 'react';
+import axios from 'axios';
 
 const inter = Inter({ subsets: ['latin'] });
 export const metadata: Metadata = {

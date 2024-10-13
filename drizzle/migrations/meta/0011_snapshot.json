@@ -1,5 +1,5 @@
 {
-  "id": "1996a5cd-28f5-4439-9e69-e13641a6dbc8",
+  "id": "79e4527c-118b-4837-8cfe-ce96eab48dd7",
   "prevId": "7c1c4b21-5966-480e-a70d-cb558ca6f903",
   "version": "7",
   "dialect": "postgresql",
@@ -25,6 +25,12 @@
           "type": "varchar(200)",
           "primaryKey": false,
           "notNull": true
+        },
+        "relation": {
+          "name": "relation",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         },
         "contact_info": {
           "name": "contact_info",
@@ -307,6 +313,12 @@
         },
         "contact_info": {
           "name": "contact_info",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "phone_number": {
+          "name": "phone_number",
           "type": "text",
           "primaryKey": false,
           "notNull": false
