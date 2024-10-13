@@ -10,14 +10,16 @@ const MedicineList = ({ medicine }: { medicine: MedicineCardOnNotification }) =>
 	const params: { notificationId: string } = useParams();
 
 	const removeMedicine = async () => {
-		await axios.delete(`/api/notifications/medicine`, {
-			data: {
-				notificationId: params.notificationId,
-				medicineId: medicine.medicineId
-			},
-		})
-		.then(data=>window.location.reload());
+		await axios
+			.delete(`/api/notifications/medicine`, {
+				data: {
+					notificationId: params.notificationId,
+					medicineId: medicine.medicineId,
+				},
+			})
+			.then((data) => window.location.reload());
 	};
+
 	return (
 		<div className="p-4 bg-blue-200 rounded flex items-center justify-between">
 			<div>
@@ -25,12 +27,10 @@ const MedicineList = ({ medicine }: { medicine: MedicineCardOnNotification }) =>
 				<p>{medicine.type}</p>
 				<p>{medicine.dosage}</p>
 			</div>
-			<div className="flex gap-2">
-				<Button variant={'secondary'}>Edit</Button>
-				<Button onClick={removeMedicine} variant={'destructive'}>
-					Delete
-				</Button>
-			</div>
+
+			<Button onClick={removeMedicine} variant={'destructive'}>
+				Delete
+			</Button>
 		</div>
 	);
 };
