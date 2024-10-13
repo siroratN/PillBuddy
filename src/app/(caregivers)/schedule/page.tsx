@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation';
 import ScheduleCard from '@/components/schedule/ScheduleCard';
 
 const Schedules = async () => {
-	const { data } = await axios.get(`${process.env.URL}/api/schedules`);
+	const { data } = await axios.get(`${process.env.NEXT_PUBLIC_URL}/api/schedules`);
 
 	const schedules: ScheduleSchema[] = data.allSchedules;
 
