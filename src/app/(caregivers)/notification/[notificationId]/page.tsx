@@ -6,18 +6,19 @@ import axios from 'axios';
 import MedicineList from '@/components/medicine/MedicineList';
 import { MedicineCardOnNotification } from '@/lib/types/db';
 import MedicineForm from '@/components/medicine/MedicineForm';
+import AddMedicine from '@/components/medicine/AddMedicine';
 
 const page = async ({ params }: { params: { notificationId: string } }) => {
 	const res = await axios.get(`${process.env.URL}/api/medicines/${params.notificationId}`);
 	const medicines = res.data.data;
 	return (
 		<div className="p-6">
+			<AddMedicine notificationId={params.notificationId}/>
 			<div className="w-full flex flex-col gap-4 mt-10 rounded-md">
 				{medicines.map((medicine: MedicineCardOnNotification) => (
 					<MedicineList key={medicine.medicineId} medicine={medicine} />
 				))}
 			</div>
-			<MedicineForm notificationId={params.notificationId}/>
 		</div>
 	);
 };

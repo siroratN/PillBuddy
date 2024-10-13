@@ -27,11 +27,10 @@ import {
 } from '@/components/ui/select';
 
 import axios from 'axios';
-import { MedicineSchema, PatientSchema } from '../../../drizzle/schema';
+import { MedicineSchema } from '../../../drizzle/schema';
 
 const MedicineForm = ({
 	notificationId,
-	
 }: {
 	notificationId: string;
 	
@@ -62,18 +61,7 @@ const MedicineForm = ({
 		axios.get('/api/medicines').then((res) => setMedicines(res.data.data));
 	}, []);
 
-	const [formOpen, setFormOpen] = useState(false);
-
 	return (
-		<div>
-			<Button
-				onClick={() => {
-					setFormOpen(!formOpen);
-				}}
-			>
-				Add Medicine
-			</Button>
-			{formOpen && (
 				<div className="max-w-lg mx-auto mt-10">
 					<Form {...form}>
 						<form action="" onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
@@ -143,9 +131,7 @@ const MedicineForm = ({
 						</form>
 					</Form>
 				</div>
-			)}
-		</div>
-	);
-};
+	)
+}
 
 export default MedicineForm;
