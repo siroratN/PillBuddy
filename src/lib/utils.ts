@@ -10,8 +10,8 @@ export function cn(...inputs: ClassValue[]) {
 
 // Find your Account SID and Auth Token at twilio.com/console
 // and set the environment variables. See http://twil.io/secure
-const accountSid = process.env.TWILIO_ACCOUNT_SID;
-const authToken = process.env.TWILIO_AUTH_TOKEN;
+const accountSid = process.env.NEXT_PUBLIC_TWILIO_ACCOUNT_SID;
+const authToken = process.env.NEXT_PUBLIC_TWILIO_AUTH_TOKEN;
 export const client = twilio(accountSid, authToken);
 
 
