@@ -41,7 +41,6 @@ export const caregivers = mySchema.table('caregivers', {
 	id: serial('id').primaryKey(),
 	clerkID: text('clerkID'),
 	name: varchar('name', { length: 200 }).notNull(),
-	relationship_to_patient: text('relation'),
 	contact_info: text('contact_info'),
 });
 
