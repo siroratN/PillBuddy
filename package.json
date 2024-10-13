@@ -10,6 +10,7 @@
     "migrate": "pnpm ts-node --esm ./src/drizzle/migrate.ts"
   },
   "dependencies": {
+    "@clerk/clerk-sdk-node": "^5.0.49",
     "@clerk/nextjs": "^5.7.1",
     "@hookform/resolvers": "^3.9.0",
     "@radix-ui/react-label": "^2.1.0",
