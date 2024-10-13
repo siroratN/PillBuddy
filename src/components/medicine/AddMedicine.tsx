@@ -6,7 +6,6 @@ import MedicineForm from './MedicineForm';
 
 const AddMedicine = ({ notificationId }: { notificationId: string }) => {
 	const [formOpen, setFormOpen] = useState(false);
-
 	return (
 		<div>
 			<Button

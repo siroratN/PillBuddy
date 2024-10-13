@@ -1,11 +1,23 @@
 'use client';
 import React from 'react';
-import { MedicineSchema } from '../../../drizzle/schema';
+import { MedicineSchema, notifications } from '../../../drizzle/schema';
 import { MedicineCardOnNotification } from '@/lib/types/db';
 import { Button } from '../ui/button';
+import axios from 'axios';
+import { useParams } from 'next/navigation';
 
 const MedicineList = ({ medicine }: { medicine: MedicineCardOnNotification }) => {
-	const removeMedicine = async () => {};
+	const params: { notificationId: string } = useParams();
+
+	const removeMedicine = async () => {
+		await axios.delete(`/api/notifications/medicine`, {
+			data: {
+				notificationId: params.notificationId,
+				medicineId: medicine.medicineId
+			},
+		})
+		.then(data=>window.location.reload());
+	};
 	return (
 		<div className="p-4 bg-blue-200 rounded flex items-center justify-between">
 			<div>
@@ -13,9 +25,11 @@ const MedicineList = ({ medicine }: { medicine: MedicineCardOnNotification }) =>
 				<p>{medicine.type}</p>
 				<p>{medicine.dosage}</p>
 			</div>
-			<div className='flex gap-2'>
+			<div className="flex gap-2">
 				<Button variant={'secondary'}>Edit</Button>
-				<Button variant={'destructive'}>Delete</Button>
+				<Button onClick={removeMedicine} variant={'destructive'}>
+					Delete
+				</Button>
 			</div>
 		</div>
 	);

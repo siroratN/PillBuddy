@@ -20,3 +20,4 @@ export async function GET(req: NextRequest, res: NextResponse) {
 		return NextResponse.json({ok: false, message: "Something went wrong!"}, {status: 500})
 	}
 }
+

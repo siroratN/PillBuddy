@@ -7,7 +7,7 @@ import {
 } from '../../../../../drizzle/schema';
 import { notifications } from '../../../../../drizzle/schema';
 import { notification_medicines } from '../../../../../drizzle/schema';
-import { eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 
 export async function POST(req: NextRequest, res: NextResponse) {
 	const form: NotificationMedicinesSchema = await req.json();
@@ -25,5 +25,23 @@ export async function POST(req: NextRequest, res: NextResponse) {
 		notification_id: form.notification_id,
 	});
 
+	return NextResponse.json({ ok: true }, { status: 200 });
+}
+
+export async function DELETE(req: NextRequest, res: NextResponse) {
+	const { notificationId, medicineId } = await req.json();
+
+	try {
+		await db
+			.delete(notification_medicines)
+			.where(
+				and(
+					eq(notification_medicines.notification_id, notificationId),
+					eq(notification_medicines.medicine_id, medicineId)
+				)
+			);
+	} catch (err) {
+		return NextResponse.json({ ok: false, message: err }, { status: 403 });
+	}
 	return NextResponse.json({ ok: true }, { status: 200 });
 }
