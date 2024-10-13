@@ -24,9 +24,26 @@ export async function POST(req: NextRequest, res: NextResponse) {
 		return NextResponse.json({ ok: false }, { status: 500 });
 	}
 
-	// await db.select().from(caregivers).where(eq(caregivers.clerkID))
+	console.log(user.id);
 
-	await db.insert(schedules).values({ patient_id: patient_id, start_date: start_date });
+	const data = await db
+		.select({ id: caregivers.id })
+		.from(caregivers)
+		.where(eq(caregivers.clerkID, user.id));
+
+	if (!data) {
+		return NextResponse.json({ ok: false }, { status: 500 });
+	}
+
+	const caregiversId = data[0].id;
+
+	try {
+		await db
+			.insert(schedules)
+			.values({ patient_id: patient_id, start_date: start_date, caregivers_id: caregiversId });
+	} catch (err) {
+		return NextResponse.json({ ok: false, message: err }, { status: 500 });
+	}
 
 	return NextResponse.json({ ok: true }, { status: 200 });
 }

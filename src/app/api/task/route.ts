@@ -1,14 +1,23 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import { client } from '@/lib/utils';
 import { NextRequest, NextResponse } from 'next/server';
-import { clerkClient } from '@clerk/nextjs/server';
-import { currentUser } from '@clerk/nextjs/server';
+
+async function createMessage() {
+	const message = await client.messages.create({
+		body: 'This is the ship that made the Kessel Run in fourteen parsecs?',
+		from: '+19093435505',
+		to: '+66917584445',
+	});
+
+	console.log(message.body);
+}
 
 export async function GET(req: NextRequest, res: NextResponse) {
-	const user = await currentUser();
-	if (!user) {
-		return NextResponse.json({ ok: false }, { status: 500 });
-	}
-	const userId = user.id;
-	console.log(userId)
-	return NextResponse.json({ message: 'Task is scheduled to run every minute.' });
+	createMessage();
+
+	return NextResponse.json(
+		{
+			ok: true,
+		},
+		{ status: 200 }
+	);
 }
