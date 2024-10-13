@@ -3,7 +3,7 @@ import { db } from '../../../../drizzle/db';
 import { notifications, schedules, patients } from '../../../../drizzle/schema';
 import { ScheduleSchema, NotificationSchema, PatientSchema } from '../../../../drizzle/schema';
 
-export async function GET(req: NextRequest, res:NextResponse){
-    const allPatients = await db.select().from(patients)
-    return NextResponse.json(allPatients)
+export async function GET(req: NextRequest, res: NextResponse) {
+	const allPatients = await db.select().from(patients);
+	return NextResponse.json({ data: allPatients, ok: true }, { status: 200 });
 }
