@@ -37,10 +37,12 @@ export async function GET(req: NextRequest, res: NextResponse) {
 		.leftJoin(patients, eq(patients.id, schedules.patient_id));
 
 	let total = 0;
+	let passIn = 0;
 
 	for (const noti of eachUserNotifications) {
+		total++;
 		if (noti.notificationTime.slice(0, -3) === getCurrentTime().slice(0, -3)) {
-			total++;
+			passIn++;
 			try {
 				const message_result = await client.messages.create({
 					body: `Time to take your medicine! Stay healthy and follow your schedule.\n`,
@@ -55,6 +57,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
 					{
 						ok: false,
 						total: error,
+						passIn: passIn,
 					},
 					{ status: 500 }
 				);
@@ -66,6 +69,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
 		{
 			ok: true,
 			total: total,
+			passIn: passIn,
 		},
 		{ status: 200 }
 	);
