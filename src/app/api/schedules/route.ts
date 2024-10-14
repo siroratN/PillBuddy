@@ -7,7 +7,7 @@ import { notifications } from '../../../../drizzle/schema';
 import { clerkClient, currentUser } from '@clerk/nextjs/server';
 import { ok } from 'assert';
 import { eq } from 'drizzle-orm';
-import { schedule } from 'node-cron';
+// import { schedule } from 'node-cron';
 
 export async function GET(req: NextRequest, res: NextResponse) {
 	const allSchedules = await db

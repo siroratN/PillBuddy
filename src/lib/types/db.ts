@@ -50,3 +50,16 @@ export type MedicineType = {
 	timing: string | null;
 	amount: number;
   };
+
+
+  export type medicinesType = {
+	id: number;
+	name: string;
+	type: string;
+	updated_at: Date | null;
+	created_at: Date;
+	deleted_at: Date | null;
+	dosage: string | null;
+	instructions: string | null;
+	side_effects: string | null;
+};

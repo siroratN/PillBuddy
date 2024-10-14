@@ -49,10 +49,6 @@ export const caregivers = mySchema.table('caregivers', {
 	name: varchar('name', { length: 200 }).notNull(),
 	contact_info: text('contact_info'),
 	phone_number: text('phone_number'),
-<<<<<<< HEAD
-
-=======
->>>>>>> b4a2d388144d5fc412e640fd0ca67b981e445ca6
 });
 
 export const medicines = mySchema.table('medicines', {

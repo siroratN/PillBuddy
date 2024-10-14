@@ -1,11 +1,13 @@
 'use client';
 import React from 'react';
 import { Calendar } from '@/components/ui/calendar';
-
+import { RoleContext } from '@/app/AuthProvider/page';
+import { useContext } from 'react';
 const Page = () => {
 	const [date, setDate] = React.useState<Date | undefined>(new Date());
+	const { role } = useContext(RoleContext) || { role: null };
+
 	return (
-		// check
 		<div className="w-full flex justify-center mt-32">
 			<Calendar
 				mode="single"

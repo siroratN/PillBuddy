@@ -7,7 +7,7 @@ import { NotificationType } from '@/lib/types/db';
 
 const NotificationList = ({ notification }: { notification: NotificationType }) => {
 	const router = useRouter();
-	const { role } = useContext(RoleContext);
+	// const { role } = useContext(RoleContext);
 	let total = 0;
 	return (
 		<div
@@ -18,7 +18,7 @@ const NotificationList = ({ notification }: { notification: NotificationType }) 
 			}}
 		>
 			<div>
-				{role}
+				{/* {role} */}
 				<p className="text-xl font-bold">Next reminder at {notification.time.slice(0, -3)}</p>
 				<ul className="list-disc pl-8 mt-4">
 					{notification.medicines.map((pill) => {

@@ -1,15 +1,23 @@
+// AuthProvider.tsx
 'use client';
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import axios from 'axios';
 import { useAuth, useUser } from '@clerk/nextjs';
-import RoleCheck from '@/components/RoleCheck';
+import { useRouter } from 'next/navigation';
 
-export const RoleContext = createContext<any>(null);
 
-const AuthProvider = () => {
+interface RoleContextType {
+    role: string | null;
+}
+
+export const RoleContext = createContext<RoleContextType | null>(null);
+
+const AuthProvider = ({ children }: { children: ReactNode }) => {
     const { isSignedIn } = useAuth();
     const { user } = useUser();
     const [role, setRole] = useState<string | null>(null);
+    const router = useRouter(); 
+
 
     useEffect(() => {
         const fetchUserRole = async () => {
@@ -19,9 +27,10 @@ const AuthProvider = () => {
                         params: { clerkID: user.id },
                     });
 
-                    if (response.status == 200) {
-                        console.log('dd')
+                    if (response.status === 200) {
+                        console.log('User role fetched:', response.data.role);
                         setRole(response.data.role);
+
                     }
                 } catch (error) {
                     console.error('Error fetching user role:', error);
@@ -32,11 +41,31 @@ const AuthProvider = () => {
         fetchUserRole();
     }, [isSignedIn, user]);
 
+    useEffect(() => {
+        if (role) {
+            if (role === 'caregiver') {
+                router.push('/schedule');
+            } else if (role === 'patient') {
+                router.push('/home'); 
+            } else {
+                router.push('/');
+            }
+        }
+    }, [role, router]);
+
     return (
         <RoleContext.Provider value={{ role }}>
-            <RoleCheck />
+            {children}
         </RoleContext.Provider>
     );
 };
+
+// export const useRole = () => {
+//     const context = useContext(RoleContext);
+//     if (!context) {
+//         throw new Error('useRole must be used within a RoleProvider');
+//     }
+//     return context;
+// };
 
 export default AuthProvider;

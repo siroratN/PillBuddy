@@ -32,7 +32,6 @@ const page = async ({ params }: { params: { id: string } }) => {
 		}
 		return acc;
 	}, [] as NotificationType[]);
-	console.log(notifications);
 
 	return (
 		<div className="p-6">
