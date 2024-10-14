@@ -7,6 +7,7 @@ import Navbar from '@/components/Navbar';
 import Header from '@/components/ui/header';
 import { auth, currentUser } from '@clerk/nextjs/server';
 import { useEffect } from 'react';
+import axios from 'axios';
 import { Kanit } from 'next/font/google'
 
 const kanit = Kanit({

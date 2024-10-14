@@ -6,12 +6,35 @@ import AddButton from '@/components/nofitication/AddButton';
 
 const page = async ({ params }: { params: { id: string } }) => {
 	const res = await axios.get(`${process.env.NEXT_PUBLIC_URL}/api/notifications/${params.id}`);
-	const notifications = res.data.data;
+	let notifications = res.data.data;
+	notifications = notifications.reduce((acc, curr) => {
+		const notification = acc.find((n) => n.id === curr.id);
+		if (notification) {
+			notification.medicines.push({
+				name: curr.medicine,
+				amount: curr.amount,
+				timing: curr.timing
+			});
+		} else {
+			acc.push({
+				id: curr.id,
+				time: curr.time,
+				meal: curr.meal,
+				medicines: [{
+					name: curr.medicine,
+					quantity: curr.quantity,
+					timing: curr.timing
+				}]
+			});
+		}
+		return acc;
+	}, []);
+	console.log(notifications);
 
 	return (
 		<div className="p-6">
-			<AddButton name='Notification' to={`/notification/create`} />
-			<div className="grid grid-cols-2 justify-items-center bg-gray-200 p-4 gap-y-4 mt-8">
+			<AddButton name="Notification" to={`/notification/create`} />
+			<div className="grid justify-items-center w-full gap-y-4 mt-8">
 				{notifications.map((notification: NotificationSchema) => (
 					<NotificationList key={notification.id} notification={notification} />
 				))}

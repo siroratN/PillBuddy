@@ -1,6 +1,6 @@
 {
-  "id": "11ae2a10-8b55-4fb6-a8c1-5fdb2b53f527",
-  "prevId": "aca30197-d75b-41d8-a939-4d965994c93d",
+  "id": "9651f6a9-b827-4646-8589-7be9df5a086e",
+  "prevId": "28821aea-58d0-4037-9b64-292b935867e2",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -14,17 +14,17 @@
           "primaryKey": true,
           "notNull": true
         },
+        "clerkID": {
+          "name": "clerkID",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
         "name": {
           "name": "name",
           "type": "varchar(200)",
           "primaryKey": false,
           "notNull": true
-        },
-        "relation": {
-          "name": "relation",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
         },
         "contact_info": {
           "name": "contact_info",
@@ -176,6 +176,19 @@
           "primaryKey": false,
           "notNull": true,
           "default": 1
+        },
+        "timing": {
+          "name": "timing",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "success": {
+          "name": "success",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
         }
       },
       "indexes": {},
@@ -249,12 +262,6 @@
           "primaryKey": false,
           "notNull": false,
           "default": "'morning'"
-        },
-        "sent_at": {
-          "name": "sent_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false
         }
       },
       "indexes": {},
@@ -287,6 +294,12 @@
           "primaryKey": true,
           "notNull": true
         },
+        "clerkID": {
+          "name": "clerkID",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
         "name": {
           "name": "name",
           "type": "varchar(200)",
@@ -301,6 +314,12 @@
         },
         "contact_info": {
           "name": "contact_info",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "phone_number": {
+          "name": "phone_number",
           "type": "text",
           "primaryKey": false,
           "notNull": false
@@ -382,11 +401,31 @@
           "name": "id",
           "type": "uuid",
           "primaryKey": true,
-          "notNull": true
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "clerkID": {
+          "name": "clerkID",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         },
         "name": {
           "name": "name",
           "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "role": {
+          "name": "role",
+          "type": "role",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": false
         }

@@ -2,22 +2,23 @@
 import React from 'react';
 import { ScheduleSchema } from '../../../drizzle/schema';
 import { useRouter } from 'next/navigation';
-const ScheduleCard = ({ schedule }: { schedule: ScheduleSchema }) => {
-
-    const router = useRouter()
+import { ScheduleCardType } from '@/lib/types/db';
+const ScheduleCard = ({ schedule }: { schedule: ScheduleCardType }) => {
+	const router = useRouter();
 
 	return (
 		<div
-			key={schedule.id}
-			className="bg-gray-200 p-4 cursor-pointer"
+			key={schedule.scheduleId}
+			className="bg-gray-200 p-4 cursor-pointer rounded-md"
 			onClick={() => {
-				return router.push(`/schedule/${schedule.id}`);
+				return router.push(`/schedule/${schedule.scheduleId}`);
 			}}
 		>
-			<p>{schedule.caregivers_id}</p>
-			<p>{schedule.id}</p>
-			<p>{schedule.patient_id}</p>
-			<p>{schedule.start_date}</p>
+			{/* <p>{schedule.caregiverName}</p> */}
+			<p>{schedule.scheduleId}</p>
+			<p>{schedule.patientName}</p>
+			<p>{schedule.patientAge} years</p>
+			<p>{schedule.startDate}</p>
 		</div>
 	);
 };

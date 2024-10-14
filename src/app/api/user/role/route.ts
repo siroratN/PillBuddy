@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { patients, caregivers, users } from '../../../../../drizzle/schema'; // Adjust the import according to your structure
+import { patients, caregivers } from '../../../../../drizzle/schema'; // Adjust the import according to your structure
 import { db } from '../../../../../drizzle/db'; // Adjust the import according to your structure
-import { eq } from 'drizzle-orm';
 
 export async function POST(req: NextRequest) {
     try {
@@ -11,12 +10,6 @@ export async function POST(req: NextRequest) {
         if (!id || !role) {
             return NextResponse.json({ message: 'ID and role are required.' }, { status: 400 });
         }
-
-        await db
-            .update(users)
-            .set({ role: role })
-            .where(eq(users.clerkID, id))
-            .returning();
 
         let result;
 
@@ -34,15 +27,11 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ message: 'Invalid role.' }, { status: 400 });
         }
 
-        if (result.length > 0) {
-            return NextResponse.json({
-                message: `${role.charAt(0).toUpperCase() + role.slice(1)} added successfully.`,
-                data: result,
-            }, { status: 201 });
+        if (result) {
+            return NextResponse.json({ message: `${role.charAt(0).toUpperCase() + role.slice(1)} added successfully.` }, { status: 201 });
         }
 
         return NextResponse.json({ message: 'Failed to add user.' }, { status: 500 });
-
     } catch (error) {
         console.error('Error adding user:', error);
         return NextResponse.json({ message: 'Internal server error.' }, { status: 500 });

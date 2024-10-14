@@ -20,6 +20,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
 		return NextResponse.json({ ok: false, message: 'Already has this medicine.' }, { status: 403 });
 	}
 	await db.insert(notification_medicines).values({
+		timing: form.timing,
 		dosage_amount: form.dosage_amount,
 		medicine_id: form.medicine_id,
 		notification_id: form.notification_id,
