@@ -17,6 +17,7 @@ import twilio from 'twilio';
 // 		to: to,
 // 	});
 // }
+export const fetchCache = 'force-no-store';
 
 export async function GET(req: NextRequest, res: NextResponse) {
 	const accountSid = process.env.NEXT_PUBLIC_TWILIO_ACCOUNT_SID;
