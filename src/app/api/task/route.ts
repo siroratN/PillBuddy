@@ -10,6 +10,7 @@ import {
 import { eq } from 'drizzle-orm';
 import twilio from 'twilio';
 
+
 // async function createMessage(to: string, body: string) {
 // 	const message = await client.messages.create({
 // 		body: body,
@@ -17,8 +18,8 @@ import twilio from 'twilio';
 // 		to: to,
 // 	});
 // }
-export const fetchCache = 'force-no-store';
-
+export const dynamic = 'force-dynamic';
+export const revalidate = 1;
 export async function GET(req: NextRequest, res: NextResponse) {
 	const accountSid = process.env.NEXT_PUBLIC_TWILIO_ACCOUNT_SID;
 	const authToken = process.env.NEXT_PUBLIC_TWILIO_AUTH_TOKEN;
