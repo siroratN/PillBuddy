@@ -5,6 +5,16 @@ pipeline {
         // Define variables
         DOCKER_IMAGE       = 'siroratnambun/pillbuddy:latest'
         DOCKER_CREDENTIALS = credentials('bc992db8-ac96-45e9-9d83-4e64f78e3ed6')
+        DB_URL = credentials('DB_URL')
+        NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY = credentials('clerk_publish')
+        CLERK_SECRET_KEY = credentials('clerk_secret')
+        NEXT_PUBLIC_CLERK_SIGN_IN_URL = credentials('clerk_signin')
+        NEXT_PUBLIC_CLERK_SIGN_UP_URL = credentials('clerk_signup')
+        NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL = credentials('clerk_after_signin')
+        NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL = credentials('clerk_after_signup')
+        NEXT_PUBLIC_TWILIO_ACCOUNT_SID = credentials('twilio_sid')
+        NEXT_PUBLIC_TWILIO_AUTH_TOKEN = credentials('twilio_auth')
+
     }
 
     stages {
