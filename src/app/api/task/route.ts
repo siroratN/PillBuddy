@@ -23,39 +23,44 @@ const client = twilio(accountSid, authToken);
 // }
 
 export async function GET(req: NextRequest, res: NextResponse) {
-	const eachUserNotifications = await db
-		.select({
-			patientName: patients.name, // ดึงชื่อผู้ป่วย
-			patientPhone: patients.phone_number,
-			scheduleId: schedules.id, // ดึง ID ตาราง schedule
-			notificationTime: notifications.notification_time, // เวลาที่ต้องแจ้งเตือน
-			notificationStatus: notifications.notification_status, // สถานะการแจ้งเตือน
-			meal: notifications.meal, // มื้ออาหารที่เกี่ยวข้อง
-		})
-		.from(notifications)
-		.leftJoin(schedules, eq(schedules.id, notifications.schedule_id))
-		.leftJoin(patients, eq(patients.id, schedules.patient_id)); // Join ตาราง schedules กับ patients เพื่อดึงข้อมูลของทุกคน
+    const eachUserNotifications = await db
+        .select({
+            patientName: patients.name,
+            patientPhone: patients.phone_number,
+            scheduleId: schedules.id,
+            notificationTime: notifications.notification_time,
+            notificationStatus: notifications.notification_status,
+            meal: notifications.meal,
+        })
+        .from(notifications)
+        .leftJoin(schedules, eq(schedules.id, notifications.schedule_id))
+        .leftJoin(patients, eq(patients.id, schedules.patient_id));
 
-	let total = 0;
+    let total = 0;
 
-	eachUserNotifications.forEach(async (noti) => {
-		if (noti.notificationTime.slice(0, -3) == getCurrentTime().slice(0, -3)) {
-			const message_result = await client.messages.create({
-				body: `Time to take your medicine! Stay healthy and follow your schedule. \n`,
-				from: '+19093435505',
-				to: noti.patientPhone || '+66917584445',
-			});
-			if (message_result.body) {
-				total++;
-			}
-		}
-	});
+    for (const noti of eachUserNotifications) {
+        if (noti.notificationTime.slice(0, -3) === getCurrentTime().slice(0, -3)) {
+            try {
+                const message_result = await client.messages.create({
+                    body: `Time to take your medicine! Stay healthy and follow your schedule.\n`,
+                    from: '+19093435505',
+                    to: noti.patientPhone || '+66917584445',
+                });
+                if (message_result.body) {
+                    total++;
+                }
+            } catch (error) {
+                console.error('Error sending message:', error);
+                // คุณสามารถจัดการข้อผิดพลาดเพิ่มเติมที่นี่ เช่น บันทึกลงฐานข้อมูลหรือส่งข้อความแจ้งเตือน
+            }
+        }
+    }
 
-	return NextResponse.json(
-		{
-			ok: true,
-			total: total,
-		},
-		{ status: 200 }
-	);
+    return NextResponse.json(
+        {
+            ok: true,
+            total: total,
+        },
+        { status: 200 }
+    );
 }
