@@ -1,4 +1,4 @@
-import { createScheduledDateTime, getCurrentTime } from '@/lib/utils';
+import { createScheduledDateTime } from '@/lib/utils';
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '../../../../drizzle/db';
 import {
@@ -23,6 +23,15 @@ export async function GET(req: NextRequest, res: NextResponse) {
 	const authToken = process.env.NEXT_PUBLIC_TWILIO_AUTH_TOKEN;
 	const client = twilio(accountSid, authToken);
 
+	const getCurrentTime = (): string => {
+		const now = new Date();
+		const hours = String(now.getHours()).padStart(2, '0');
+		const minutes = String(now.getMinutes()).padStart(2, '0');
+		const seconds = String(now.getSeconds()).padStart(2, '0');
+
+		return `${hours}:${minutes}:${seconds}`;
+	};
+
 	const eachUserNotifications = await db
 		.select({
 			patientName: patients.name,
@@ -38,14 +47,16 @@ export async function GET(req: NextRequest, res: NextResponse) {
 
 	let total = 0;
 	let passIn = 0;
+	let textTest = '';
 
 	for (const noti of eachUserNotifications) {
 		total++;
-		if (noti.notificationTime.slice(0, -3) === getCurrentTime().slice(0, -3)) {
+		textTest += `${noti.notificationTime.slice(0, -3)} == ${getCurrentTime().slice(0, -3)} |`;
+		if (noti.notificationTime.slice(0, -3) == getCurrentTime().slice(0, -3)) {
 			passIn++;
 			try {
 				const message_result = await client.messages.create({
-					body: `Time to take your medicine! Stay healthy and follow your schedule.\n`,
+					body: `Time to take your medicine! Stay healthy and follow your schedule.`,
 					from: '+19093435505',
 					to: noti.patientPhone || '+66917584445',
 				});
@@ -58,6 +69,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
 						ok: false,
 						total: error,
 						passIn: passIn,
+						textTest: textTest
 					},
 					{ status: 500 }
 				);
@@ -70,6 +82,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
 			ok: true,
 			total: total,
 			passIn: passIn,
+			textTest: textTest
 		},
 		{ status: 200 }
 	);
