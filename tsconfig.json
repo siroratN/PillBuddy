@@ -27,3 +27,4 @@
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "cron.js"],
   "exclude": ["node_modules"]
 }
+

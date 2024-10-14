@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import { Calendar } from '@/components/ui/calendar';
-import { RoleContext } from '@/app/AuthProvider/page';
+import { RoleContext } from '@/app/AuthProvider/AuthProiver';
 import { useContext } from 'react';
 const Page = () => {
 	const [date, setDate] = React.useState<Date | undefined>(new Date());
