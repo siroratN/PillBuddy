@@ -5,6 +5,7 @@ import { Calendar } from '@/components/ui/calendar';
 const Page = () => {
 	const [date, setDate] = React.useState<Date | undefined>(new Date());
 	return (
+		// check
 		<div className="w-full flex justify-center mt-32">
 			<Calendar
 				mode="single"
