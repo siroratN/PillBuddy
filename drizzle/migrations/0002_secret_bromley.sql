@@ -1,0 +1,1 @@
+ALTER TABLE "pillbuddy"."notification_medicines" ADD COLUMN "success" boolean DEFAULT false;

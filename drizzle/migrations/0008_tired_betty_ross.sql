@@ -1,1 +1,0 @@
-ALTER TABLE "pillbuddy"."users" ADD COLUMN "clerkID" text;

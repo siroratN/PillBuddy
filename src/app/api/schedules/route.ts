@@ -1,16 +1,26 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '../../../../drizzle/db';
-import { caregivers, schedules } from '../../../../drizzle/schema';
+import { caregivers, patients, schedules } from '../../../../drizzle/schema';
 import { ScheduleSchema } from '../../../../drizzle/schema';
 import { NotificationSchema } from '../../../../drizzle/schema';
 import { notifications } from '../../../../drizzle/schema';
 import { clerkClient, currentUser } from '@clerk/nextjs/server';
 import { ok } from 'assert';
 import { eq } from 'drizzle-orm';
+import { schedule } from 'node-cron';
 
 export async function GET(req: NextRequest, res: NextResponse) {
-	const allSchedules = await db.select().from(schedules);
-
+	const allSchedules = await db
+		.select({
+			scheduleId: schedules.id,
+			caregiverName: caregivers.name,
+			patientName: patients.name,
+			patientAge: patients.age,
+			startDate: schedules.start_date,
+		})
+		.from(schedules)
+		.innerJoin(patients, eq(patients.id, schedules.patient_id))
+		.innerJoin(caregivers, eq(caregivers.id, schedules.caregivers_id));
 	return NextResponse.json({
 		allSchedules,
 	});

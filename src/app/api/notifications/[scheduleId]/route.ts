@@ -1,6 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '../../../../../drizzle/db';
-import { notifications, schedules, patients } from '../../../../../drizzle/schema';
+import {
+	notifications,
+	schedules,
+	patients,
+	notification_medicines,
+	medicines,
+} from '../../../../../drizzle/schema';
 import { ScheduleSchema, NotificationSchema, PatientSchema } from '../../../../../drizzle/schema';
 import { eq, not } from 'drizzle-orm';
 
@@ -12,12 +18,25 @@ export async function GET(req: NextRequest, res: NextResponse) {
 	}
 	try {
 		const allNotifications = await db
-			.select()
+			.select({
+				id: notifications.id,
+				time: notifications.notification_time,
+				medicine: medicines.name, // ดึงข้อมูลยาเป็นแถวแยกกัน
+				amount: notification_medicines.dosage_amount,
+				timing: notification_medicines.timing,
+				meal: notifications.meal
+			})
 			.from(notifications)
-			.where(eq(notifications.schedule_id, parseInt(scheduleId)));
+			.where(eq(notifications.schedule_id, parseInt(scheduleId)))
+			.innerJoin(
+				notification_medicines,
+				eq(notifications.id, notification_medicines.notification_id)
+			)
+			.innerJoin(medicines, eq(notification_medicines.medicine_id, medicines.id))
+			.orderBy(notifications.id, notifications.notification_time);
+			console.log(allNotifications)
 		return NextResponse.json({ ok: true, data: allNotifications }, { status: 200 });
 	} catch (err) {
-		return NextResponse.json({ok: false, message: "Something went wrong!"}, {status: 500})
+		return NextResponse.json({ ok: false, message: 'Something went wrong!' }, { status: 500 });
 	}
 }
-

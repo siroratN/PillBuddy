@@ -1,6 +1,6 @@
 {
-  "id": "fabcbb94-f57c-46ef-bc67-25de40da9b18",
-  "prevId": "0a25c8d9-81a0-4bf1-a56a-1e0c1cfc40f4",
+  "id": "ae3afed9-190b-4bbe-898c-bef75a9ecc8d",
+  "prevId": "77810de0-1a5c-46dc-9dab-eda93be2c8aa",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -14,17 +14,17 @@
           "primaryKey": true,
           "notNull": true
         },
+        "clerkID": {
+          "name": "clerkID",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
         "name": {
           "name": "name",
           "type": "varchar(200)",
           "primaryKey": false,
           "notNull": true
-        },
-        "relation": {
-          "name": "relation",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
         },
         "contact_info": {
           "name": "contact_info",
@@ -117,6 +117,12 @@
           "primaryKey": false,
           "notNull": true
         },
+        "side_effects": {
+          "name": "side_effects",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
         "updated_at": {
           "name": "updated_at",
           "type": "timestamp",
@@ -146,24 +152,23 @@
       "name": "notification_medicines",
       "schema": "pillbuddy",
       "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
         "notification_id": {
           "name": "notification_id",
           "type": "serial",
           "primaryKey": false,
           "notNull": true
         },
-        "medicines_id": {
-          "name": "medicines_id",
+        "medicine_id": {
+          "name": "medicine_id",
           "type": "serial",
           "primaryKey": false,
           "notNull": true
-        },
-        "amount": {
-          "name": "amount",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "default": 1
         },
         "dosage_amount": {
           "name": "dosage_amount",
@@ -171,6 +176,12 @@
           "primaryKey": false,
           "notNull": true,
           "default": 1
+        },
+        "timing": {
+          "name": "timing",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
@@ -189,13 +200,13 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "notification_medicines_medicines_id_medicines_id_fk": {
-          "name": "notification_medicines_medicines_id_medicines_id_fk",
+        "notification_medicines_medicine_id_medicines_id_fk": {
+          "name": "notification_medicines_medicine_id_medicines_id_fk",
           "tableFrom": "notification_medicines",
           "tableTo": "medicines",
           "schemaTo": "pillbuddy",
           "columnsFrom": [
-            "medicines_id"
+            "medicine_id"
           ],
           "columnsTo": [
             "id"
@@ -204,15 +215,7 @@
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {
-        "notification_medicines_notification_id_medicines_id_pk": {
-          "name": "notification_medicines_notification_id_medicines_id_pk",
-          "columns": [
-            "notification_id",
-            "medicines_id"
-          ]
-        }
-      },
+      "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
     "pillbuddy.notifications": {
@@ -252,19 +255,6 @@
           "primaryKey": false,
           "notNull": false,
           "default": "'morning'"
-        },
-        "dosage_amount": {
-          "name": "dosage_amount",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "default": 1
-        },
-        "sent_at": {
-          "name": "sent_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false
         }
       },
       "indexes": {},
@@ -297,6 +287,12 @@
           "primaryKey": true,
           "notNull": true
         },
+        "clerkID": {
+          "name": "clerkID",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
         "name": {
           "name": "name",
           "type": "varchar(200)",
@@ -311,6 +307,12 @@
         },
         "contact_info": {
           "name": "contact_info",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "phone_number": {
+          "name": "phone_number",
           "type": "text",
           "primaryKey": false,
           "notNull": false
@@ -343,25 +345,11 @@
           "primaryKey": false,
           "notNull": true
         },
-        "date": {
-          "name": "date",
+        "start_date": {
+          "name": "start_date",
           "type": "date",
           "primaryKey": false,
           "notNull": true
-        },
-        "status": {
-          "name": "status",
-          "type": "status",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "'not_taken'"
-        },
-        "side_effects": {
-          "name": "side_effects",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
         }
       },
       "indexes": {},
@@ -406,11 +394,31 @@
           "name": "id",
           "type": "uuid",
           "primaryKey": true,
-          "notNull": true
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "clerkID": {
+          "name": "clerkID",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         },
         "name": {
           "name": "name",
           "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "role": {
+          "name": "role",
+          "type": "role",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": false
         }

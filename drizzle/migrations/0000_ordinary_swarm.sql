@@ -1,9 +1,9 @@
-CREATE SCHEMA "pillbuddy";
+
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "pillbuddy"."caregivers" (
 	"id" serial PRIMARY KEY NOT NULL,
+	"clerkID" text,
 	"name" varchar(200) NOT NULL,
-	"relation" text,
 	"contact_info" text
 );
 --> statement-breakpoint
@@ -19,16 +19,19 @@ CREATE TABLE IF NOT EXISTS "pillbuddy"."medicines" (
 	"dosage" varchar,
 	"instructions" text,
 	"type" varchar(50) NOT NULL,
+	"side_effects" text,
 	"updated_at" timestamp,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"deleted_at" timestamp
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "pillbuddy"."notification_medicines" (
+	"id" serial PRIMARY KEY NOT NULL,
 	"notification_id" serial NOT NULL,
-	"medicines_id" serial NOT NULL,
-	"amount" integer DEFAULT 1 NOT NULL,
-	CONSTRAINT "notification_medicines_notification_id_medicines_id_pk" PRIMARY KEY("notification_id","medicines_id")
+	"medicine_id" serial NOT NULL,
+	"dosage_amount" integer DEFAULT 1 NOT NULL,
+	"timing" text,
+	"success" boolean DEFAULT false
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "pillbuddy"."notifications" (
@@ -36,30 +39,31 @@ CREATE TABLE IF NOT EXISTS "pillbuddy"."notifications" (
 	"schedule_id" serial NOT NULL,
 	"notification_time" time NOT NULL,
 	"notification_status" "notification_status" DEFAULT 'pending',
-	"meal" "meal" DEFAULT 'morning',
-	"dosage_amount" integer DEFAULT 1 NOT NULL,
-	"sent_at" timestamp
+	"meal" "meal" DEFAULT 'morning'
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "pillbuddy"."patients" (
 	"id" serial PRIMARY KEY NOT NULL,
+	"clerkID" text,
 	"name" varchar(200) NOT NULL,
 	"age" integer NOT NULL,
-	"contact_info" text
+	"contact_info" text,
+	"phone_number" text
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "pillbuddy"."scheduels" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"patient_id" serial NOT NULL,
 	"caregivers_id" serial NOT NULL,
-	"date" date NOT NULL,
-	"status" "status" DEFAULT 'not_taken',
-	"side_effects" text
+	"start_date" date NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "pillbuddy"."users" (
-	"id" uuid PRIMARY KEY NOT NULL,
-	"name" text
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"clerkID" text,
+	"name" text,
+	"email" text,
+	"role" "role"
 );
 --> statement-breakpoint
 DO $$ BEGIN
@@ -75,7 +79,7 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "pillbuddy"."notification_medicines" ADD CONSTRAINT "notification_medicines_medicines_id_medicines_id_fk" FOREIGN KEY ("medicines_id") REFERENCES "pillbuddy"."medicines"("id") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "pillbuddy"."notification_medicines" ADD CONSTRAINT "notification_medicines_medicine_id_medicines_id_fk" FOREIGN KEY ("medicine_id") REFERENCES "pillbuddy"."medicines"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

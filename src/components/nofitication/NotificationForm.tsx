@@ -29,11 +29,14 @@ import {
 import axios from 'axios';
 import { PatientSchema } from '../../../drizzle/schema';
 
+import { useRouter } from 'next/navigation';
+
 const NotificationForm = () => {
+	const router = useRouter();
+
 	const scheduleSchema = z.object({
-		schedule_id: z.coerce.number().int(),
-		notification_time: z.string().time(),
-		dosage_amount: z.coerce.number().int().gt(0),
+		patient_id: z.coerce.number().int(),
+		notification_time: z.string(),
 		meal: z.enum(['morning', 'afternoon', 'evening', 'bedtime']),
 	});
 
@@ -42,7 +45,7 @@ const NotificationForm = () => {
 	});
 
 	const onSubmit = async (values: z.infer<typeof scheduleSchema>) => {
-		await axios.post(`/api/notifications`, values).then((data) => console.log(data));
+		await axios.post(`/api/notifications`, values).then((data) => router.back());
 	};
 
 	const [patients, setPatients] = useState<PatientSchema[]>([]);
@@ -52,15 +55,15 @@ const NotificationForm = () => {
 
 	return (
 		<div className="max-w-lg mx-auto mt-10">
-			<h1 className='text-center text-2xl mt-4'>สร้างการแจ้งเตือน</h1>
+			<h1 className="text-center text-2xl my-4 font-semibold">Add new notification</h1>
 			<Form {...form}>
-				<form action="" onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col gap-4'>
+				<form action="" onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
 					<FormField
 						control={form.control}
-						name="schedule_id"
+						name="patient_id"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel className='text-lg'>Patient</FormLabel>
+								<FormLabel className="text-lg">Patient</FormLabel>
 								<FormControl>
 									<Select onValueChange={field.onChange} defaultValue="field.value">
 										<SelectTrigger className="w-[180px]">
@@ -87,29 +90,14 @@ const NotificationForm = () => {
 						name="notification_time"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel className='text-lg'>Time</FormLabel>
+								<FormLabel className="text-lg">Time</FormLabel>
 								<FormControl>
 									<Input
 										type="time"
-										step={1}
 										onChange={field.onChange}
 										defaultValue={field.value}
-										className='w-fit'
+										className="w-fit"
 									/>
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-
-					<FormField
-						control={form.control}
-						name="dosage_amount"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel className='text-lg'>Dosage amount</FormLabel>
-								<FormControl>
-									<Input type="number" onChange={field.onChange} defaultValue={field.value} className='w-16'/>
 								</FormControl>
 								<FormMessage />
 							</FormItem>
@@ -120,7 +108,7 @@ const NotificationForm = () => {
 						name="meal"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel className='text-lg'>Meal</FormLabel>
+								<FormLabel className="text-lg">Meal</FormLabel>
 								<FormControl>
 									<Select onValueChange={field.onChange} defaultValue="field.value">
 										<SelectTrigger className="w-[180px]">
@@ -140,7 +128,9 @@ const NotificationForm = () => {
 							</FormItem>
 						)}
 					/>
-					<Button type="submit" className='mt-4 w-24'>Submit</Button>
+					<Button type="submit" className="mt-4 w-24">
+						Submit
+					</Button>
 				</form>
 			</Form>
 		</div>
