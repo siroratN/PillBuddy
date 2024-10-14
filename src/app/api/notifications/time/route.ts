@@ -50,7 +50,7 @@ export async function GET(req: NextRequest) {
     .where(
       and(
         gt(notifications.notification_time, currentTime), // Fetch future notifications
-        eq(schedules.patient_id, patientIdId) // Ensure it's the correct patient
+        // eq(schedules.patient_id, patientIdId) // Ensure it's the correct patient
       )
     )
     .leftJoin(schedules, eq(notifications.schedule_id, schedules.id)) // Link notifications to schedules
