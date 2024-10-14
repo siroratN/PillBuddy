@@ -25,8 +25,12 @@ export async function GET(req: NextRequest, res: NextResponse) {
 
 	const getCurrentTime = (mHour = 0, mMinute = 0): string => {
 		const now = new Date();
-		const hours = String(now.getHours() - mHour).padStart(2, '0');
-		const minutes = String(now.getMinutes() - mMinute).padStart(2, '0');
+
+		now.setHours(now.getHours() - mHour);
+		now.setMinutes(now.getMinutes() - mMinute);
+
+		const hours = String(now.getHours()).padStart(2, '0');
+		const minutes = String(now.getMinutes()).padStart(2, '0');
 		const seconds = String(now.getSeconds()).padStart(2, '0');
 
 		return `${hours}:${minutes}:${seconds}`;
@@ -49,7 +53,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
 	let passIn = 0;
 	let textTest = '';
 
-	const timeNow = getCurrentTime(1, 6);
+	const timeNow = getCurrentTime(7, 6);
 
 	for (const noti of eachUserNotifications) {
 		total++;
