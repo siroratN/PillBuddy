@@ -10,9 +10,7 @@ import {
 import { eq } from 'drizzle-orm';
 import twilio from 'twilio';
 
-const accountSid = process.env.NEXT_PUBLIC_TWILIO_ACCOUNT_SID;
-const authToken = process.env.NEXT_PUBLIC_TWILIO_AUTH_TOKEN;
-const client = twilio(accountSid, authToken);
+
 
 // async function createMessage(to: string, body: string) {
 // 	const message = await client.messages.create({
@@ -23,6 +21,10 @@ const client = twilio(accountSid, authToken);
 // }
 
 export async function GET(req: NextRequest, res: NextResponse) {
+	const accountSid = process.env.NEXT_PUBLIC_TWILIO_ACCOUNT_SID;
+	const authToken = process.env.NEXT_PUBLIC_TWILIO_AUTH_TOKEN;
+	const client = twilio(accountSid, authToken);
+
     const eachUserNotifications = await db
         .select({
             patientName: patients.name,
