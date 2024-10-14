@@ -52,8 +52,6 @@ export type MedicineNotification = {
 	success: boolean;
 };
 
-  };
-
 
   export type medicinesType = {
 	id: number;
