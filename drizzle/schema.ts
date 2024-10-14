@@ -26,6 +26,8 @@ export const users = mySchema.table('users', {
 	id: uuid('id').primaryKey().defaultRandom(),
 	clerkID: text('clerkID'),
 	name: text('name'),
+	role: text('role'),
+	email: varchar('email', { length: 255 }).notNull(),
 });
 
 export const patients = mySchema.table('patients', {

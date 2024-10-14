@@ -6,7 +6,7 @@ import { eq } from 'drizzle-orm';
 
 export async function POST(req: NextRequest) {
     try {
-        const { id, name } = await req.json(); 
+        const { id, name, email } = await req.json(); 
 
         console.log('Received:', id, name);
 
@@ -22,16 +22,11 @@ export async function POST(req: NextRequest) {
         await db.insert(users).values({
             clerkID: id,
             name: name,
+            email: email
         });
-        return NextResponse.redirect('/role'), { status: 201 };
+        return NextResponse.json({ message: 'Success to save user' }, { status: 201 });
     } catch (error) {
-        console.error('Error saving user:', error);
         return NextResponse.json({ message: 'Failed to save user' }, { status: 500 });
     }
 }
 
-
-export async function GET(req: NextRequest) {
-    const { id } = await req.json();
-    console.log(id) 
-}

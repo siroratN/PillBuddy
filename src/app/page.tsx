@@ -1,33 +1,49 @@
-'use server'
-import { Button } from '@/components/ui/button';
-import { db } from '../../drizzle/db';
-import { auth, currentUser } from '@clerk/nextjs/server'; // Server-side imports
+'use client'; // ทำให้คอมโพเนนต์นี้ทำงานในฝั่งไคลเอนต์
+import React, { useEffect } from 'react';
+import { useAuth, useUser } from '@clerk/nextjs';
 import axios from 'axios';
+import { useRouter } from 'next/navigation';
 
-export default async function HomePage() {
-    const { userId } = await auth();
-    const user = await currentUser();
+const HomePage = () => {
+    const { isSignedIn } = useAuth(); 
+    const { user } = useUser();
+    const router = useRouter(); 
 
-    if (!userId || !user) {
-        return <div>You are not logged in</div>;
-    }
-    try {
-        const response = await axios.post(`${process.env.NEXT_PUBLIC_URL}/api/user`, {
-            id: user.id,
-            name: user.firstName
-        });
+    useEffect(() => {
+        const saveUserToDatabase = async () => {
+            if (isSignedIn && user) {
+                try {
+                    const response = await axios.post(`${process.env.NEXT_PUBLIC_URL}/api/user`, {
+                        id: user.id,
+                        name: user.fullName,
+                        email: user.primaryEmailAddress?.emailAddress,
+                    });
 
-        if (response.status === 201) {
-            console.log('User saved to database');
-        }
-    } catch (error) {
-        console.log('Error fetching user data:', error);
-    }
+                    if (response.status == 201) { //สร้าง user ใหม่
+                        console.log('User saved to database');
+                        router.push('/role');
+                    }
+                    if (response.status == 409) { 
+                        router.push('/');
+                    }
+                } catch (error) {
+                    console.log('Error fetching user data:', error);
+                }
+            }
+        };
+
+        saveUserToDatabase();
+    }, [isSignedIn, user, router]);
 
     return (
         <div className='mt-10 text-start max-w-xl mx-auto bg-neutral-200 p-5 rounded'>
-            <h1 className='text-4xl font-bold text-center'>Welcome, {user.firstName}</h1>
+            {user ? (
+                <h1 className='text-4xl font-bold text-center'>Welcome, {user.firstName}</h1>
+            ) : (
+                <h1 className='text-4xl font-bold text-center'>Welcome, Guest</h1>
+            )}
         </div>
-        
     );
-}
+};
+
+export default HomePage;
