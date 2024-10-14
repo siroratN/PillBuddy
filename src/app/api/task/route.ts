@@ -40,6 +40,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
 
 	for (const noti of eachUserNotifications) {
 		if (noti.notificationTime.slice(0, -3) === getCurrentTime().slice(0, -3)) {
+			total++;
 			try {
 				const message_result = await client.messages.create({
 					body: `Time to take your medicine! Stay healthy and follow your schedule.\n`,
@@ -47,7 +48,6 @@ export async function GET(req: NextRequest, res: NextResponse) {
 					to: noti.patientPhone || '+66917584445',
 				});
 				if (message_result.body) {
-					total++;
 				}
 			} catch (error) {
 				console.error('Error sending message:', error);
