@@ -64,6 +64,13 @@
       "when": 1728894040267,
       "tag": "0017_petite_lizard",
       "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1728917286185,
+      "tag": "0018_regular_selene",
+      "breakpoints": true
     }
   ]
 }
