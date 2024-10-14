@@ -8,8 +8,7 @@
     "build": "pnpm run build",
     "start": "next start",
     "lint": "next lint",
-    "migrate": "pnpm ts-node --esm ./src/drizzle/migrate.ts",
-    "install": "pnpm install"
+    "migrate": "pnpm ts-node --esm ./src/drizzle/migrate.ts"
   },
   "type": "module",
   "dependencies": {
