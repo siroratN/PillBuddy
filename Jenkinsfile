@@ -87,6 +87,23 @@ pipeline {
                     sh 'docker pull $DOCKER_IMAGE'
                     // Run the Docker container
                     sh 'docker run -d --name pillbuddy-webhook -p 8085:80 $DOCKER_IMAGE'
+                    // Pull the Docker image from Docker Hub
+                    sh 'docker pull $DOCKER_IMAGE'
+                    // Run the Docker container with environment variables
+                    sh '''
+                    docker run -d --name pillbuddy-webhook \
+                    -e DB_URL=$DB_URL \
+                    -e NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=$NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY \
+                    -e CLERK_SECRET_KEY=$CLERK_SECRET_KEY \
+                    -e NEXT_PUBLIC_CLERK_SIGN_IN_URL=$NEXT_PUBLIC_CLERK_SIGN_IN_URL \
+                    -e NEXT_PUBLIC_CLERK_SIGN_UP_URL=$NEXT_PUBLIC_CLERK_SIGN_UP_URL \
+                    -e NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=$NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL \
+                    -e NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=$NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL \
+                    -e NEXT_PUBLIC_TWILIO_ACCOUNT_SID=$NEXT_PUBLIC_TWILIO_ACCOUNT_SID \
+                    -e NEXT_PUBLIC_TWILIO_AUTH_TOKEN=$NEXT_PUBLIC_TWILIO_AUTH_TOKEN \
+                    -e NEXT_PUBLIC_URL=$NEXT_PUBLIC_URL \
+                    -p 8085:80 $DOCKER_IMAGE
+                    '''
                 }
             }
         }
