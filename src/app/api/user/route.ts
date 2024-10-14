@@ -28,8 +28,3 @@ export async function POST(req: NextRequest) {
 		return NextResponse.json({ message: 'Failed to save user' }, { status: 500 });
 	}
 }
-
-export async function GET(req: NextRequest) {
-	const { id } = await req.json();
-	console.log(id);
-}
