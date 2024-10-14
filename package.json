@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "devcron": "concurrently \"next dev\" \"ts-node -r tsconfig-paths/register cron.ts\"",
-    "build": "pnpm run build",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "migrate": "pnpm ts-node --esm ./src/drizzle/migrate.ts"
