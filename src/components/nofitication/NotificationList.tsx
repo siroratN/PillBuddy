@@ -2,7 +2,7 @@
 import React, { useContext } from 'react';
 import { medicines, NotificationSchema } from '../../../drizzle/schema';
 import { useRouter } from 'next/navigation';
-import { RoleContext } from '@/app/AuthProvider/page';
+import { RoleContext } from '@/app/AuthProvider/AuthProiver';
 import { NotificationType } from '@/lib/types/db';
 
 const NotificationList = ({ notification }: { notification: NotificationType }) => {

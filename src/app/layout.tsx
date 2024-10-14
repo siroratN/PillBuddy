@@ -9,7 +9,7 @@ import { auth, currentUser } from '@clerk/nextjs/server';
 import { useContext, useEffect } from 'react';
 import axios from 'axios';
 import { Kanit } from 'next/font/google'
-import AuthProvider from './AuthProvider/page';
+import AuthProvider from './AuthProvider/AuthProiver';
 
 const kanit = Kanit({
     weight: ['400', '700'],

@@ -2,7 +2,7 @@
 import { Calendar, CalendarCheck, House, Settings, Tablets } from 'lucide-react';
 import useDetectScroll from '@smakss/react-scroll-direction';
 import Link from 'next/link';
-import { RoleContext } from '@/app/AuthProvider/page';
+import { RoleContext } from '@/app/AuthProvider/AuthProiver';
 import { useContext } from 'react';
 
 const Navbar = () => {
