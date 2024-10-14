@@ -5,11 +5,36 @@ FROM node:18-alpine AS builder
 WORKDIR /app
 
 # Install dependencies
-COPY package.json package-lock.json* ./ 
-RUN npm install --frozen-lockfile
+COPY package.json pnpm-lock.yaml* ./ 
+RUN npm install -g pnpm && pnpm install --frozen-lockfile
+
 
 # Copy the rest of the app source code
 COPY . .
+
+ARG DB_URL
+ARG NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+ARG CLERK_SECRET_KEY
+ARG NEXT_PUBLIC_CLERK_SIGN_IN_URL
+ARG NEXT_PUBLIC_CLERK_SIGN_UP_URL
+ARG NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL
+ARG NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL
+ARG NEXT_PUBLIC_TWILIO_ACCOUNT_SID
+ARG NEXT_PUBLIC_TWILIO_AUTH_TOKEN
+ARG NEXT_PUBLIC_URL
+
+# Use these variables in your app, or set them as environment variables
+ENV DB_URL=$DB_URL
+ENV NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=$NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+ENV CLERK_SECRET_KEY=$CLERK_SECRET_KEY
+ENV NEXT_PUBLIC_CLERK_SIGN_IN_URL=$NEXT_PUBLIC_CLERK_SIGN_IN_URL
+ENV NEXT_PUBLIC_CLERK_SIGN_UP_URL=$NEXT_PUBLIC_CLERK_SIGN_UP_URL
+ENV NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=$NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL
+ENV NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=$NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL
+ENV NEXT_PUBLIC_TWILIO_ACCOUNT_SID=$NEXT_PUBLIC_TWILIO_ACCOUNT_SID
+ENV NEXT_PUBLIC_TWILIO_AUTH_TOKEN=$NEXT_PUBLIC_TWILIO_AUTH_TOKEN
+ENV NEXT_PUBLIC_URL=$NEXT_PUBLIC_URL
+
 
 # Build the Next.js app
 RUN pnpm run build
@@ -20,8 +45,11 @@ FROM node:18-alpine AS runner
 # Set working directory
 WORKDIR /app
 
+# Install pnpm globally
+RUN npm install -g pnpm
+
 # Install only production dependencies
-COPY package.json package-lock.json* ./ 
+COPY package.json pnpm-lock.yaml* ./ 
 RUN pnpm install --production --frozen-lockfile
 
 # Copy the Next.js build from the build stage
@@ -37,4 +65,4 @@ ENV NODE_ENV=production
 EXPOSE 3000
 
 # Start the Next.js app
-CMD ["npm", "start"]
+CMD ["pnpm", "start"]

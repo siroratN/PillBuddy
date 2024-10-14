@@ -46,3 +46,22 @@ export async function DELETE(req: NextRequest, res: NextResponse) {
 	}
 	return NextResponse.json({ ok: true }, { status: 200 });
 }
+
+export async function PATCH(req: NextRequest, res: NextResponse) {
+	const { data } = await req.json();
+	const medicineInNotiId = data.medicineInNotiId;
+	if (!medicineInNotiId) {
+		return NextResponse.json({ ok: false, message: 'Notification not found!' }, { status: 200 });
+	}
+	try {
+		const takeMedicine = await db
+			.update(notification_medicines)
+			.set({ success: true })
+			.where(eq(notification_medicines.id, medicineInNotiId))
+			.execute();
+			console.log(takeMedicine)
+		return NextResponse.json({ ok: true, data: takeMedicine }, { status: 200 });
+	} catch (err) {
+		return NextResponse.json({ ok: false }, { status: 403 });
+	}
+}

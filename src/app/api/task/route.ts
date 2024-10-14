@@ -1,8 +1,7 @@
-import { createScheduledDateTime } from '@/lib/utils';
+
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '../../../../drizzle/db';
 import {
-	notification_medicines,
 	notifications,
 	patients,
 	schedules,
@@ -10,14 +9,6 @@ import {
 import { eq } from 'drizzle-orm';
 import twilio from 'twilio';
 
-
-// async function createMessage(to: string, body: string) {
-// 	const message = await client.messages.create({
-// 		body: body,
-// 		from: '+19093435505',
-// 		to: to,
-// 	});
-// }
 export const dynamic = 'force-dynamic';
 export const revalidate = 1;
 export async function GET(req: NextRequest, res: NextResponse) {

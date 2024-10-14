@@ -23,32 +23,35 @@ export type MedicineType = {
 	name: string;
 	amount: number;
 	timing: string | null;
-  };
-  
-  export type NotificationType = {
+};
+
+export type NotificationType = {
 	id: number;
 	time: string;
-	meal: "morning" | "afternoon" | "evening" | "bedtime" | null;
+	meal: 'morning' | 'afternoon' | 'evening' | 'bedtime' | null;
 	medicines: MedicineType[];
-  };
-  
-  export type CurrentNotificationType = {
+};
+
+export type CurrentNotificationType = {
 	id: number;
 	time: string;
 	medicine: string;
 	amount: number;
 	timing: string | null;
-	meal: "morning" | "afternoon" | "evening" | "bedtime" | null;
-  };
+	meal: 'morning' | 'afternoon' | 'evening' | 'bedtime' | null;
+};
 
-
-  export type MedicineNotification = {
+export type MedicineNotification = {
 	medicineId: number;
+	medicineInNotiId: number;
 	medicineName: string;
 	dosage: string | null;
 	type: string;
 	timing: string | null;
 	amount: number;
+	success: boolean;
+};
+
   };
 
 
