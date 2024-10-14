@@ -38,19 +38,23 @@ export async function GET(req: NextRequest, res: NextResponse) {
 		.leftJoin(schedules, eq(schedules.id, notifications.schedule_id))
 		.leftJoin(patients, eq(patients.id, schedules.patient_id)); // Join ตาราง schedules กับ patients เพื่อดึงข้อมูลของทุกคน
 
+	let result;
+
 	eachUserNotifications.forEach((noti) => {
 		console.log(noti.notificationTime.slice(0, -3), getCurrentTime().slice(0, -3));
 		if (noti.notificationTime.slice(0, -3) == getCurrentTime().slice(0, -3)) {
-			createMessage(
+			const message_result = createMessage(
 				noti.patientPhone || '+66917584445',
 				`Time to take your medicine! Stay healthy and follow your schedule. \n`
 			);
+			result = message_result;
 		}
 	});
 
 	return NextResponse.json(
 		{
 			ok: true,
+			resultMessage: result,
 		},
 		{ status: 200 }
 	);
