@@ -1,2 +1,0 @@
-ALTER TABLE "pillbuddy"."notification_medicines" DROP CONSTRAINT "notification_medicines_notification_id_medicine_id_pk";--> statement-breakpoint
-ALTER TABLE "pillbuddy"."notification_medicines" ADD COLUMN "id" serial PRIMARY KEY NOT NULL;

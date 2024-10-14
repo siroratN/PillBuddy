@@ -1,1 +1,0 @@
-ALTER TABLE "pillbuddy"."caregivers" DROP COLUMN IF EXISTS "relation";

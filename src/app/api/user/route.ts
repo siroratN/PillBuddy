@@ -4,7 +4,7 @@ import { db } from '../../../../drizzle/db';
 import { users, patients, caregivers } from '../../../../drizzle/schema';
 import { eq } from 'drizzle-orm';
 
-export async function POST(req: NextRequest) {
+export async function POST(req: NextRequest, res:NextResponse) {
 	try {
 		const { id, name } = await req.json();
 
@@ -27,9 +27,4 @@ export async function POST(req: NextRequest) {
 		console.error('Error saving user:', error);
 		return NextResponse.json({ message: 'Failed to save user' }, { status: 500 });
 	}
-}
-
-export async function GET(req: NextRequest) {
-	const { id } = await req.json();
-	console.log(id);
 }

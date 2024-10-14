@@ -1,6 +1,4 @@
 'use server'
-import { Button } from '@/components/ui/button';
-import { db } from '../../drizzle/db';
 import { auth, currentUser } from '@clerk/nextjs/server'; // Server-side imports
 import axios from 'axios';
 
