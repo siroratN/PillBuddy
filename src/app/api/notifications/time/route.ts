@@ -9,6 +9,8 @@ import {
 import { NextRequest, NextResponse } from "next/server";
 import { asc, gt, eq, and } from "drizzle-orm";
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 1;
 export async function GET(req: NextRequest) {
   try {
 
