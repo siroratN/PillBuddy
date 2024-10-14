@@ -25,9 +25,6 @@ async function createMessage(to: string, body: string) {
 }
 
 export async function GET(req: NextRequest, res: NextResponse) {
-	// createMessage("+66917584445", "Hi james from the future!");
-	// createMessage("+66917584445", "Hi james from the future!");
-
 	const eachUserNotifications = await db
 		.select({
 			patientName: patients.name, // ดึงชื่อผู้ป่วย
@@ -36,7 +33,6 @@ export async function GET(req: NextRequest, res: NextResponse) {
 			notificationTime: notifications.notification_time, // เวลาที่ต้องแจ้งเตือน
 			notificationStatus: notifications.notification_status, // สถานะการแจ้งเตือน
 			meal: notifications.meal, // มื้ออาหารที่เกี่ยวข้อง
-			sentAt: notifications.sent_at, // เวลาที่ส่งแจ้งเตือน
 		})
 		.from(notifications)
 		.leftJoin(schedules, eq(schedules.id, notifications.schedule_id))
