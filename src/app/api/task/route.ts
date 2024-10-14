@@ -23,10 +23,10 @@ export async function GET(req: NextRequest, res: NextResponse) {
 	const authToken = process.env.NEXT_PUBLIC_TWILIO_AUTH_TOKEN;
 	const client = twilio(accountSid, authToken);
 
-	const getCurrentTime = (): string => {
+	const getCurrentTime = (mHour = 0, mMinute = 0): string => {
 		const now = new Date();
-		const hours = String(now.getHours()).padStart(2, '0');
-		const minutes = String(now.getMinutes()).padStart(2, '0');
+		const hours = String(now.getHours() - mHour).padStart(2, '0');
+		const minutes = String(now.getMinutes() - mMinute).padStart(2, '0');
 		const seconds = String(now.getSeconds()).padStart(2, '0');
 
 		return `${hours}:${minutes}:${seconds}`;
@@ -49,10 +49,13 @@ export async function GET(req: NextRequest, res: NextResponse) {
 	let passIn = 0;
 	let textTest = '';
 
+	const timeNow = getCurrentTime(1, 6);
+
 	for (const noti of eachUserNotifications) {
 		total++;
-		textTest += `${noti.notificationTime.slice(0, -3)} == ${getCurrentTime().slice(0, -3)} |`;
-		if (noti.notificationTime.slice(0, -3) == getCurrentTime().slice(0, -3)) {
+
+		textTest += `${noti.notificationTime.slice(0, -3)} == ${timeNow.slice(0, -3)} |`;
+		if (noti.notificationTime.slice(0, -3) == timeNow.slice(0, -3)) {
 			passIn++;
 			try {
 				const message_result = await client.messages.create({
@@ -69,7 +72,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
 						ok: false,
 						total: error,
 						passIn: passIn,
-						textTest: textTest
+						textTest: textTest,
 					},
 					{ status: 500 }
 				);
@@ -82,7 +85,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
 			ok: true,
 			total: total,
 			passIn: passIn,
-			textTest: textTest
+			textTest: textTest,
 		},
 		{ status: 200 }
 	);
