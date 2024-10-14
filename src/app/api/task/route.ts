@@ -37,6 +37,20 @@ export async function GET(req: NextRequest, res: NextResponse) {
 	};
 	const timeNow = getCurrentTime(7, 0);
 
+	// const eachUserNotifications = await db
+	// 	.select({
+	// 		patientName: patients.name,
+	// 		patientPhone: patients.phone_number,
+	// 		scheduleId: schedules.id,
+	// 		notificationTime: notifications.notification_time,
+	// 		notificationStatus: notifications.notification_status,
+	// 		meal: notifications.meal,
+	// 	})
+	// 	.from(notifications)
+	// 	.leftJoin(schedules, eq(schedules.id, notifications.schedule_id))
+	// 	.leftJoin(patients, eq(patients.id, schedules.patient_id));
+
+	const allNotifications = await db.select().from(notifications);
 	const eachUserNotifications = await db
 		.select({
 			patientName: patients.name,
@@ -44,7 +58,6 @@ export async function GET(req: NextRequest, res: NextResponse) {
 			scheduleId: schedules.id,
 			notificationTime: notifications.notification_time,
 			notificationStatus: notifications.notification_status,
-			meal: notifications.meal,
 		})
 		.from(notifications)
 		.leftJoin(schedules, eq(schedules.id, notifications.schedule_id))
@@ -76,6 +89,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
 						total: error,
 						passIn: passIn,
 						textTest: textTest,
+						allNotifications: allNotifications,
 					},
 					{ status: 500 }
 				);
@@ -89,6 +103,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
 			total: total,
 			passIn: passIn,
 			textTest: textTest,
+			allNotifications: allNotifications,
 		},
 		{ status: 200 }
 	);
