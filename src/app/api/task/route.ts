@@ -1,4 +1,4 @@
-import { createScheduledDateTime, getCurrentTime } from '@/lib/utils';
+import { createScheduledDateTime } from '@/lib/utils';
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '../../../../drizzle/db';
 import {
@@ -10,51 +10,110 @@ import {
 import { eq } from 'drizzle-orm';
 import twilio from 'twilio';
 
-const accountSid = process.env.NEXT_PUBLIC_TWILIO_ACCOUNT_SID;
-const authToken = process.env.NEXT_PUBLIC_TWILIO_AUTH_TOKEN;
-const client = twilio(accountSid, authToken);
 
-async function createMessage(to: string, body: string) {
-	const message = await client.messages.create({
-		body: body,
-		from: '+19093435505',
-		to: to,
-	});
-
-	console.log(message.body);
-}
-
+// async function createMessage(to: string, body: string) {
+// 	const message = await client.messages.create({
+// 		body: body,
+// 		from: '+19093435505',
+// 		to: to,
+// 	});
+// }
+export const dynamic = 'force-dynamic';
+export const revalidate = 1;
 export async function GET(req: NextRequest, res: NextResponse) {
-	// createMessage("+66917584445", "Hi james from the future!");
-	// createMessage("+66917584445", "Hi james from the future!");
+	const accountSid = process.env.NEXT_PUBLIC_TWILIO_ACCOUNT_SID;
+	const authToken = process.env.NEXT_PUBLIC_TWILIO_AUTH_TOKEN;
+	const client = twilio(accountSid, authToken);
 
+	const getCurrentTime = (mHour = 0, mMinute = 0): string => {
+		const now = new Date();
+
+		now.setHours(now.getHours() + mHour);
+		now.setMinutes(now.getMinutes() + mMinute);
+
+		const hours = String(now.getHours()).padStart(2, '0');
+		const minutes = String(now.getMinutes()).padStart(2, '0');
+		const seconds = String(now.getSeconds()).padStart(2, '0');
+
+		return `${hours}:${minutes}:${seconds}`;
+	};
+	const timeNow = getCurrentTime(7, 0);
+
+	// const eachUserNotifications = await db
+	// 	.select({
+	// 		patientName: patients.name,
+	// 		patientPhone: patients.phone_number,
+	// 		scheduleId: schedules.id,
+	// 		notificationTime: notifications.notification_time,
+	// 		notificationStatus: notifications.notification_status,
+	// 		meal: notifications.meal,
+	// 	})
+	// 	.from(notifications)
+	// 	.leftJoin(schedules, eq(schedules.id, notifications.schedule_id))
+	// 	.leftJoin(patients, eq(patients.id, schedules.patient_id));
+
+	const allNotifications = await db.select().from(notifications);
 	const eachUserNotifications = await db
 		.select({
-			patientName: patients.name, // ดึงชื่อผู้ป่วย
+			patientName: patients.name,
 			patientPhone: patients.phone_number,
-			scheduleId: schedules.id, // ดึง ID ตาราง schedule
-			notificationTime: notifications.notification_time, // เวลาที่ต้องแจ้งเตือน
-			notificationStatus: notifications.notification_status, // สถานะการแจ้งเตือน
-			meal: notifications.meal, // มื้ออาหารที่เกี่ยวข้อง
-			sentAt: notifications.sent_at, // เวลาที่ส่งแจ้งเตือน
+			scheduleId: schedules.id,
+			notificationTime: notifications.notification_time,
+			notificationStatus: notifications.notification_status,
 		})
 		.from(notifications)
 		.leftJoin(schedules, eq(schedules.id, notifications.schedule_id))
-		.leftJoin(patients, eq(patients.id, schedules.patient_id)); // Join ตาราง schedules กับ patients เพื่อดึงข้อมูลของทุกคน
+		.leftJoin(patients, eq(patients.id, schedules.patient_id));
 
-	eachUserNotifications.forEach((noti) => {
-		if (noti.notificationTime.slice(0, -3) == getCurrentTime().slice(0, -3)) {
-			createMessage(
-				noti.patientPhone || '+66917584445',
-				`Time to take your medicine! Stay healthy and follow your schedule. \n`
-			);
+	let total = 0;
+	let passIn = 0;
+	let textTest = '';
+
+	for (const noti of eachUserNotifications) {
+		total++;
+
+		textTest += `${noti.notificationTime.slice(0, -3)} == ${timeNow.slice(0, -3)} |`;
+		if (noti.notificationTime.slice(0, -3) == timeNow.slice(0, -3)) {
+			passIn++;
+			try {
+				const message_result = await client.messages.create({
+					body: `Time to take your medicine! Stay healthy and follow your schedule.`,
+					from: '+19093435505',
+					to: noti.patientPhone || '+66917584445',
+				});
+				if (message_result.body) {
+				}
+			} catch (error) {
+				console.error('Error sending message:', error);
+				return NextResponse.json(
+					{
+						ok: false,
+						total: error,
+						passIn: passIn,
+						textTest: textTest,
+						allNotifications: allNotifications,
+					},
+					{ status: 500 }
+				);
+			}
 		}
-	});
+	}
 
-	return NextResponse.json(
+	const response = NextResponse.json(
 		{
 			ok: true,
+			total: total,
+			passIn: passIn,
+			textTest: textTest,
+			allNotifications: allNotifications,
 		},
 		{ status: 200 }
 	);
+
+	// เพิ่ม cache-control headers
+	response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+	response.headers.set('Pragma', 'no-cache');
+	response.headers.set('Expires', '0');
+
+	return response;
 }

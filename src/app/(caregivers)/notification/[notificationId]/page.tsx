@@ -4,7 +4,7 @@ import NotificationAddButton from '@/components/nofitication/AddButton';
 import { MedicineSchema } from '../../../../../drizzle/schema';
 import axios from 'axios';
 import MedicineList from '@/components/medicine/MedicineList';
-import { MedicineCardOnNotification } from '@/lib/types/db';
+import { MedicineCardOnNotification, MedicineNotification } from '@/lib/types/db';
 import MedicineForm from '@/components/medicine/MedicineForm';
 import AddMedicine from '@/components/medicine/AddMedicine';
 
@@ -15,7 +15,7 @@ const page = async ({ params }: { params: { notificationId: string } }) => {
 		<div className="p-6">
 			<AddMedicine notificationId={params.notificationId}/>
 			<div className="w-full flex flex-col gap-4 mt-10 rounded-md">
-				{medicines.map((medicine: MedicineCardOnNotification) => (
+				{medicines.map((medicine: MedicineNotification) => (
 					<MedicineList key={medicine.medicineId} medicine={medicine} />
 				))}
 			</div>

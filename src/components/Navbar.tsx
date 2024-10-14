@@ -8,7 +8,7 @@ import React from 'react';
 
 const Navbar = () => {
 	const { scrollDir } = useDetectScroll();
-	const role = 'caregiver';
+	let role = 'caregiver';
 
 	return (
 		<nav

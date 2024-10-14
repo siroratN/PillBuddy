@@ -1,11 +1,6 @@
 {
-<<<<<<< HEAD
-  "id": "af94bd39-6bf7-4309-8dea-d6e21c0a34f4",
-  "prevId": "01b16559-7c49-4d13-a3ed-ddf1715c1b5d",
-=======
-  "id": "fcc16e65-b3a0-4e51-a862-9282c3747151",
-  "prevId": "a5243699-6315-4354-aee8-f4192807c905",
->>>>>>> b4a2d388144d5fc412e640fd0ca67b981e445ca6
+  "id": "925ba591-ca2a-4c66-baa0-29af46d1d3f0",
+  "prevId": "fcc16e65-b3a0-4e51-a862-9282c3747151",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -448,7 +443,6 @@
     }
   },
   "enums": {
-<<<<<<< HEAD
     "public.meal": {
       "name": "meal",
       "schema": "public",
@@ -476,8 +470,6 @@
         "sent"
       ]
     },
-=======
->>>>>>> b4a2d388144d5fc412e640fd0ca67b981e445ca6
     "public.role": {
       "name": "role",
       "schema": "public",

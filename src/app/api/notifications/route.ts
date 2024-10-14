@@ -7,6 +7,12 @@ import { notifications } from '../../../../drizzle/schema';
 import { eq } from 'drizzle-orm';
 import { NotificationForm } from '@/lib/types/db';
 
+export async function GET(req: NextRequest, res: NextResponse) {
+	const allNotifications = await db.select().from(notifications);
+
+	return NextResponse.json({ ok: allNotifications }, { status: 200 });
+}
+
 export async function POST(req: NextRequest, res: NextResponse) {
 	const form: NotificationForm = await req.json();
 
