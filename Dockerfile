@@ -5,8 +5,8 @@ FROM node:18-alpine AS builder
 WORKDIR /app
 
 # Install dependencies
-COPY package.json package-lock.json* ./ 
-RUN pnpm install --frozen-lockfile
+COPY package.json pnpm-lock.yaml* ./ 
+RUN npm install -g pnpm && pnpm install --frozen-lockfile
 
 # Copy the rest of the app source code
 COPY . .
@@ -20,8 +20,11 @@ FROM node:18-alpine AS runner
 # Set working directory
 WORKDIR /app
 
+# Install pnpm globally
+RUN npm install -g pnpm
+
 # Install only production dependencies
-COPY package.json package-lock.json* ./ 
+COPY package.json pnpm-lock.yaml* ./ 
 RUN pnpm install --production --frozen-lockfile
 
 # Copy the Next.js build from the build stage
@@ -37,4 +40,4 @@ ENV NODE_ENV=production
 EXPOSE 3000
 
 # Start the Next.js app
-CMD ["npm", "start"]
+CMD ["pnpm", "start"]
