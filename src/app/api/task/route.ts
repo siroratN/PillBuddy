@@ -35,6 +35,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
 
 		return `${hours}:${minutes}:${seconds}`;
 	};
+	const timeNow = getCurrentTime(7, 0);
 
 	const eachUserNotifications = await db
 		.select({
@@ -52,8 +53,6 @@ export async function GET(req: NextRequest, res: NextResponse) {
 	let total = 0;
 	let passIn = 0;
 	let textTest = '';
-
-	const timeNow = getCurrentTime(7, 0);
 
 	for (const noti of eachUserNotifications) {
 		total++;
@@ -84,7 +83,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
 		}
 	}
 
-	return NextResponse.json(
+	const response = NextResponse.json(
 		{
 			ok: true,
 			total: total,
@@ -93,4 +92,11 @@ export async function GET(req: NextRequest, res: NextResponse) {
 		},
 		{ status: 200 }
 	);
+
+	// เพิ่ม cache-control headers
+	response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+	response.headers.set('Pragma', 'no-cache');
+	response.headers.set('Expires', '0');
+
+	return response;
 }
