@@ -1,13 +1,13 @@
 'use client';
 import React from 'react';
 import { MedicineSchema, notifications } from '../../../drizzle/schema';
-import { MedicineCardOnNotification } from '@/lib/types/db';
-import { Button } from '../ui/button';
+import { MedicineCardOnNotification, MedicineNotification } from '@/lib/types/db';
+import { Button } from '../ui/button'
 import axios from 'axios';
 import { useParams } from 'next/navigation';
 import { Clock, Tablets } from 'lucide-react';
 
-const MedicineList = ({ medicine }: { medicine: MedicineCardOnNotification }) => {
+const MedicineList = ({ medicine }: { medicine:MedicineNotification }) => {
 	const params: { notificationId: string } = useParams();
 
 	const removeMedicine = async () => {

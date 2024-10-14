@@ -2,8 +2,9 @@
 import React from 'react';
 import { medicines, NotificationSchema } from '../../../drizzle/schema';
 import { useRouter } from 'next/navigation';
+import { NotificationType } from '@/lib/types/db';
 
-const NotificationList = ({ notification }: { notification: NotificationSchema }) => {
+const NotificationList = ({ notification }: { notification: NotificationType }) => {
 	const router = useRouter();
 	let total = 0;
 	return (
@@ -19,7 +20,7 @@ const NotificationList = ({ notification }: { notification: NotificationSchema }
 
 				<ul className="list-disc pl-8 mt-4">
 					{notification.medicines.map((pill) => {
-						total += parseInt(pill.amount || 0);
+						total += pill.amount || 0;
 						return (
 							<li className="text-lg">
 								{pill.name} {pill.amount || 1} {pill.amount == 1 ? 'pill' : 'pills'} {pill.timing}
@@ -30,7 +31,7 @@ const NotificationList = ({ notification }: { notification: NotificationSchema }
 			</div>
 
 			<p className="text-center ">
-				{(notification.meal)} total {total} pills
+				{notification.meal} total {total} pills
 			</p>
 		</div>
 	);
