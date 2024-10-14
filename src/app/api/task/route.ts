@@ -26,8 +26,8 @@ export async function GET(req: NextRequest, res: NextResponse) {
 	const getCurrentTime = (mHour = 0, mMinute = 0): string => {
 		const now = new Date();
 
-		now.setHours(now.getHours() - mHour);
-		now.setMinutes(now.getMinutes() - mMinute);
+		now.setHours(now.getHours() + mHour);
+		now.setMinutes(now.getMinutes() + mMinute);
 
 		const hours = String(now.getHours()).padStart(2, '0');
 		const minutes = String(now.getMinutes()).padStart(2, '0');
