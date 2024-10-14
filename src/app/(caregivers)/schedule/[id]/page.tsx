@@ -37,7 +37,7 @@ const page = async ({ params }: { params: { id: string } }) => {
 	return (
 		<div className="p-6">
 			<AddButton name="Notification" to={`/notification/create`} />
-			<div className="grid justify-items-center w-full gap-y-4 mt-8">
+			<div className="grid w-full gap-y-4 mt-8">
 				{notifications.map((notification: NotificationType) => (
 					<NotificationList key={notification.id} notification={notification} />
 				))}

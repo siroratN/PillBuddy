@@ -12,6 +12,7 @@ import { eq, not } from 'drizzle-orm';
 
 export async function GET(req: NextRequest, res: NextResponse) {
 	const scheduleId = req.nextUrl.href.split('/').at(-1);
+	console.log("num", scheduleId)
 
 	if (!scheduleId) {
 		return NextResponse.json({ ok: false, message: 'Cannot find schedule id!' }, { status: 404 });
@@ -28,13 +29,14 @@ export async function GET(req: NextRequest, res: NextResponse) {
 			})
 			.from(notifications)
 			.where(eq(notifications.schedule_id, parseInt(scheduleId)))
-			.innerJoin(
+			.leftJoin(
 				notification_medicines,
 				eq(notifications.id, notification_medicines.notification_id)
 			)
-			.innerJoin(medicines, eq(notification_medicines.medicine_id, medicines.id))
+			.leftJoin(medicines, eq(notification_medicines.medicine_id, medicines.id))
 			.orderBy(notifications.id, notifications.notification_time);
-			console.log(allNotifications)
+	
+			// console.log(allNotifications)
 		return NextResponse.json({ ok: true, data: allNotifications }, { status: 200 });
 	} catch (err) {
 		return NextResponse.json({ ok: false, message: 'Something went wrong!' }, { status: 500 });

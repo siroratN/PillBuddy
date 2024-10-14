@@ -10,19 +10,18 @@ const NotificationList = ({ notification }: { notification: NotificationType }) 
 	return (
 		<div
 			key={notification.id}
-			className="p-4 cursor-pointer w-92 place-items-center bg-[#fdfdff] rounded-xl h-[200px] border shadow-md flex flex-col justify-between"
+			className="p-4 cursor-pointer w-92 bg-[#fdfdff] rounded-xl h-[200px] border shadow-md flex flex-col justify-between"
 			onClick={() => {
 				router.push(`/notification/${notification.id}`);
 			}}
 		>
 			<div>
 				<p className="text-xl font-bold">Next reminder at {notification.time.slice(0, -3)}</p>
-
 				<ul className="list-disc pl-8 mt-4">
 					{notification.medicines.map((pill) => {
 						total += pill.amount || 0;
 						return (
-							<li className="text-lg">
+							<li key={pill.name} className="text-lg">
 								{pill.name} {pill.amount || 1} {pill.amount == 1 ? 'pill' : 'pills'} {pill.timing}
 							</li>
 						);

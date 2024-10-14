@@ -39,6 +39,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
 		.leftJoin(patients, eq(patients.id, schedules.patient_id)); // Join ตาราง schedules กับ patients เพื่อดึงข้อมูลของทุกคน
 
 	eachUserNotifications.forEach((noti) => {
+		console.log(noti.notificationTime.slice(0, -3), getCurrentTime().slice(0, -3));
 		if (noti.notificationTime.slice(0, -3) == getCurrentTime().slice(0, -3)) {
 			createMessage(
 				noti.patientPhone || '+66917584445',
