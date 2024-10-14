@@ -14,15 +14,13 @@ const accountSid = process.env.NEXT_PUBLIC_TWILIO_ACCOUNT_SID;
 const authToken = process.env.NEXT_PUBLIC_TWILIO_AUTH_TOKEN;
 const client = twilio(accountSid, authToken);
 
-async function createMessage(to: string, body: string) {
-	const message = await client.messages.create({
-		body: body,
-		from: '+19093435505',
-		to: to,
-	});
-
-	console.log(message.body);
-}
+// async function createMessage(to: string, body: string) {
+// 	const message = await client.messages.create({
+// 		body: body,
+// 		from: '+19093435505',
+// 		to: to,
+// 	});
+// }
 
 export async function GET(req: NextRequest, res: NextResponse) {
 	const eachUserNotifications = await db
@@ -38,26 +36,25 @@ export async function GET(req: NextRequest, res: NextResponse) {
 		.leftJoin(schedules, eq(schedules.id, notifications.schedule_id))
 		.leftJoin(patients, eq(patients.id, schedules.patient_id)); // Join ตาราง schedules กับ patients เพื่อดึงข้อมูลของทุกคน
 
-	let result;
+	let total = 0;
 
-	eachUserNotifications.forEach((noti) => {
-		console.log(noti.notificationTime.slice(0, -3), getCurrentTime().slice(0, -3));
+	eachUserNotifications.forEach(async (noti) => {
 		if (noti.notificationTime.slice(0, -3) == getCurrentTime().slice(0, -3)) {
-			const message_result = createMessage(
-				noti.patientPhone || '+66917584445',
-				`Time to take your medicine! Stay healthy and follow your schedule. \n`
-			);
-			result = message_result;
+			const message_result = await client.messages.create({
+				body: `Time to take your medicine! Stay healthy and follow your schedule. \n`,
+				from: '+19093435505',
+				to: noti.patientPhone || '+66917584445',
+			});
+			if (message_result.body) {
+				total++;
+			}
 		}
 	});
-
-	console.log(123, 'James is Here');
-	console.log(result);
 
 	return NextResponse.json(
 		{
 			ok: true,
-			resultMessage: result,
+			total: total,
 		},
 		{ status: 200 }
 	);
