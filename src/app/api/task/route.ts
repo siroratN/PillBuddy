@@ -51,6 +51,9 @@ export async function GET(req: NextRequest, res: NextResponse) {
 		}
 	});
 
+	console.log(123, 'James is Here');
+	console.log(result);
+
 	return NextResponse.json(
 		{
 			ok: true,
