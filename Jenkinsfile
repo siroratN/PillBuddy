@@ -14,6 +14,7 @@ pipeline {
         NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL = credentials('clerk_after_signup')
         NEXT_PUBLIC_TWILIO_ACCOUNT_SID = credentials('twilio_sid')
         NEXT_PUBLIC_TWILIO_AUTH_TOKEN = credentials('twilio_auth')
+        NEXT_PUBLIC_URL = credentials('public_url')
 
     }
 
