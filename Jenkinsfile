@@ -36,6 +36,20 @@ pipeline {
                        sh 'echo "Running in $(pwd)"'
                        sh 'echo start build the Docker image = $DOCKER_IMAGE'
                        sh 'docker build -t $DOCKER_IMAGE .'
+                       sh '''
+                    docker build \
+                    --build-arg DB_URL=$DB_URL \
+                    --build-arg NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=$NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY \
+                    --build-arg CLERK_SECRET_KEY=$CLERK_SECRET_KEY \
+                    --build-arg NEXT_PUBLIC_CLERK_SIGN_IN_URL=$NEXT_PUBLIC_CLERK_SIGN_IN_URL \
+                    --build-arg NEXT_PUBLIC_CLERK_SIGN_UP_URL=$NEXT_PUBLIC_CLERK_SIGN_UP_URL \
+                    --build-arg NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=$NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL \
+                    --build-arg NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=$NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL \
+                    --build-arg NEXT_PUBLIC_TWILIO_ACCOUNT_SID=$NEXT_PUBLIC_TWILIO_ACCOUNT_SID \
+                    --build-arg NEXT_PUBLIC_TWILIO_AUTH_TOKEN=$NEXT_PUBLIC_TWILIO_AUTH_TOKEN \
+                    --build-arg NEXT_PUBLIC_URL=$NEXT_PUBLIC_URL \
+                    -t $DOCKER_IMAGE .
+                    '''
                     }   
                   
             }
