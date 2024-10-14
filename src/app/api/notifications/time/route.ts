@@ -15,23 +15,8 @@ export const revalidate = 1;
 export async function GET(req: NextRequest, response: NextResponse) {
 
 	try {
-		const clerkID = req.nextUrl.searchParams.get('clerkID');
 		const currentTime = new Date().toTimeString().split(' ')[0];
-		if (!clerkID) {
-			return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
-		}
 
-		const patient = await db
-			.select({ id: patients.id })
-			.from(patients)
-			.where(eq(patients.clerkID, clerkID));
-
-		const patientIdId = patient[0].id;
-		console.log('patientIDiD', patientIdId);
-
-		if (!patientIdId) {
-			return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
-		}
 		const closestNotification = await db
 			.select({
 				id: notifications.id,
@@ -48,7 +33,7 @@ export async function GET(req: NextRequest, response: NextResponse) {
 					// eq(schedules.patient_id, patientIdId) // Ensure it's the correct patient
 				)
 			)
-			.leftJoin(schedules, eq(notifications.schedule_id, schedules.id)) // Link notifications to schedules
+			// .leftJoin(schedules, eq(notifications.schedule_id, schedules.id)) // Link notifications to schedules
 			.leftJoin(
 				notification_medicines,
 				eq(notifications.id, notification_medicines.notification_id)
@@ -75,7 +60,6 @@ export async function GET(req: NextRequest, response: NextResponse) {
 		console.log(allMedicines);
 
 		if (closestNotification.length > 0) {
-			console.log(closestNotification[0]);
 			return NextResponse.json({
 				closestNotification: closestNotification[0],
 				allMedicines: allMedicines,
