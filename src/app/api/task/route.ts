@@ -53,7 +53,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
 	let passIn = 0;
 	let textTest = '';
 
-	const timeNow = getCurrentTime(7, 6);
+	const timeNow = getCurrentTime(7, 0);
 
 	for (const noti of eachUserNotifications) {
 		total++;
