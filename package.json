@@ -5,10 +5,11 @@
   "scripts": {
     "dev": "next dev",
     "devcron": "concurrently \"next dev\" \"ts-node -r tsconfig-paths/register cron.ts\"",
-    "build": "next build",
+    "build": "pnpm run build",
     "start": "next start",
     "lint": "next lint",
-    "migrate": "pnpm ts-node --esm ./src/drizzle/migrate.ts"
+    "migrate": "pnpm ts-node --esm ./src/drizzle/migrate.ts",
+    "install": "pnpm install"
   },
   "type": "module",
   "dependencies": {
@@ -50,8 +51,8 @@
     "@types/react-dom": "^18",
     "@types/ws": "^8.5.12",
     "drizzle-kit": "^0.24.2",
-    "eslint": "^9.12.0",
-    "eslint-config-next": "14.2.14",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "14.2.15",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
     "ts-node": "^10.9.2",
