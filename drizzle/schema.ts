@@ -24,7 +24,7 @@ const timestamps = {
 	deleted_at: timestamp('deleted_at'),
 };
 
-const userRole = pgEnum('role', ['patient', 'caregiver']);
+export const userRole = pgEnum('role', ['patient', 'caregiver']);
 
 export const users = mySchema.table('users', {
 	id: uuid('id').primaryKey().defaultRandom(),
@@ -48,6 +48,7 @@ export const caregivers = mySchema.table('caregivers', {
 	clerkID: text('clerkID'),
 	name: varchar('name', { length: 200 }).notNull(),
 	contact_info: text('contact_info'),
+	phone_number: text('phone_number'),
 });
 
 export const medicines = mySchema.table('medicines', {
@@ -60,7 +61,7 @@ export const medicines = mySchema.table('medicines', {
 	...timestamps,
 });
 
-const medicationStatus = pgEnum('status', ['taken', 'not_taken', 'postponed']);
+export const medicationStatus = pgEnum('status', ['taken', 'not_taken', 'postponed']);
 
 export const schedules = mySchema.table('scheduels', {
 	id: serial('id').primaryKey(),
@@ -86,8 +87,8 @@ export const medication_log = mySchema.table('medication_log', {
 	status: medicationStatus('status').default('not_taken'),
 });
 
-const notificationStatus = pgEnum('notification_status', ['pending', 'sent']);
-const meal = pgEnum('meal', ['morning', 'afternoon', 'evening', 'bedtime']);
+export const notificationStatus = pgEnum('notification_status', ['pending', 'sent']);
+export const meal = pgEnum('meal', ['morning', 'afternoon', 'evening', 'bedtime']);
 
 export const notifications = mySchema.table('notifications', {
 	id: serial('id').primaryKey(),
