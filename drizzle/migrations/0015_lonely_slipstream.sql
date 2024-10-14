@@ -1,0 +1,1 @@
+ALTER TABLE "pillbuddy"."caregivers" ADD COLUMN "phone_number" text;

@@ -9,6 +9,7 @@ import { auth, currentUser } from '@clerk/nextjs/server';
 import { useEffect } from 'react';
 import axios from 'axios';
 import { Kanit } from 'next/font/google'
+import AuthProvider from './AuthProvider/page';
 
 const kanit = Kanit({
     weight: ['400', '700'],
@@ -29,12 +30,11 @@ export default async function RootLayout({
 		<html lang="en">
 			<body className={cn('min-h-screen bg-background antialiased', kanit.className)}>
 			<ClerkProvider>
+				
 				<Header/>
 				{children}
-				{/* disable for development */}
-				{/* {user.userId && <Navbar/>} */}
 				<Navbar/>
-				</ClerkProvider>
+			</ClerkProvider>
 			</body>
 		</html>
 	);

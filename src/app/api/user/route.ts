@@ -13,7 +13,9 @@ export async function POST(req: NextRequest) {
 		const existingUser = await db.select().from(users).where(eq(users.clerkID, id)).execute();
 
         if (existingUser.length > 0) {
-            return NextResponse.json({ message: 'User with this clerkID already exists' }, { status: 409 });
+            console.log('fjjj')
+            return NextResponse.json({ message: 'User with this clerkID already exists' }, { status: 200 });
+            
         }
         await db.insert(users).values({
             clerkID: id,

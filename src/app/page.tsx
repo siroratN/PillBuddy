@@ -1,5 +1,5 @@
 'use client'; // ทำให้คอมโพเนนต์นี้ทำงานในฝั่งไคลเอนต์
-import React, { useEffect } from 'react';
+import React, { useEffect,createContext, useContext, useState, } from 'react';
 import { useAuth, useUser } from '@clerk/nextjs';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
@@ -19,12 +19,13 @@ const HomePage = () => {
                         email: user.primaryEmailAddress?.emailAddress,
                     });
 
-                    if (response.status == 201) { //สร้าง user ใหม่
+                    if (response.status == 201) {
                         console.log('User saved to database');
                         router.push('/role');
                     }
-                    if (response.status == 409) { 
-                        router.push('/');
+                    else if (response.status == 200) { 
+                        console.log('jjj')
+                        router.push('/AuthProvider');
                     }
                 } catch (error) {
                     console.log('Error fetching user data:', error);

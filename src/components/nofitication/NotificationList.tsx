@@ -1,10 +1,12 @@
 'use client';
-import React from 'react';
+import React, { useContext } from 'react';
 import { medicines, NotificationSchema } from '../../../drizzle/schema';
 import { useRouter } from 'next/navigation';
+import { RoleContext } from '@/app/AuthProvider/page';
 
 const NotificationList = ({ notification }: { notification: NotificationSchema }) => {
 	const router = useRouter();
+	const { role } = useContext(RoleContext);
 	let total = 0;
 	return (
 		<div
@@ -15,6 +17,7 @@ const NotificationList = ({ notification }: { notification: NotificationSchema }
 			}}
 		>
 			<div>
+				{role}
 				<p className="text-xl font-bold">Next reminder at {notification.time.slice(0, -3)}</p>
 
 				<ul className="list-disc pl-8 mt-4">
