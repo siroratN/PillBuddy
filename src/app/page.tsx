@@ -39,9 +39,9 @@ const HomePage = () => {
     return (
         <div className='mt-10 text-start max-w-xl mx-auto bg-neutral-200 p-5 rounded'>
             {user ? (
-                <h1 className='text-4xl font-bold text-center'>Welcome, {user.firstName}</h1>
+                <h1 className='text-4xl font-bold text-center'>สวัสดี, {user.firstName}</h1>
             ) : (
-                <h1 className='text-4xl font-bold text-center'>Welcome, Guest</h1>
+                <h1 className='text-4xl font-bold text-center'>กรุณาเข้าสู่ระบบ</h1>
             )}
         </div>
     );

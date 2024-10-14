@@ -3,37 +3,73 @@ import {
   medicines,
   notification_medicines,
   notifications,
+  patients,
+  schedules,
 } from "../../../../../drizzle/schema";
 import { NextRequest, NextResponse } from "next/server";
-import { asc, gt, eq } from "drizzle-orm";
+import { asc, gt, eq, and } from "drizzle-orm";
 
-export async function GET(req: Request) {
+export async function GET(req: NextRequest) {
   try {
-    const currentTime = new Date().toTimeString().split(" ")[0];
-    console.log(currentTime);
-    const closestNotification = await db
-      .select({
-        id: notifications.id,
-        // mediOnNotiId : notification_medicines.id,
-        time: notifications.notification_time,
-        medicine: medicines.name, // ดึงข้อมูลยาเป็นแถวแยกกัน
-        amount: notification_medicines.dosage_amount,
-        timing: notification_medicines.timing,
-        meal: notifications.meal,
-      })
-      .from(notifications)
-      .where(gt(notifications.notification_time, currentTime))
-      .leftJoin(
-        notification_medicines,
-        eq(notifications.id, notification_medicines.notification_id)
-      )
-      .leftJoin(medicines, eq(notification_medicines.medicine_id, medicines.id))
-      .orderBy(asc(notifications.notification_time))
-      .limit(1);
 
+    const clerkID = req.nextUrl.searchParams.get("clerkID");
+    console.log(123, req.nextUrl)
+    const currentTime = new Date().toTimeString().split(" ")[0];
+    if (!clerkID) {
+      return NextResponse.json(
+        { error: "Internal Server Error" },
+        { status: 500 }
+      );
+    }
+    
+    const patient = await db
+      .select({ id: patients.id })
+      .from(patients)
+      .where(eq(patients.clerkID, clerkID));
+
+    const patientIdId = patient[0].id;
+    console.log("patientIDiD", patientIdId)
+
+
+    if (!patientIdId) {
+      return NextResponse.json(
+        { error: "Internal Server Error" },
+        { status: 500 }
+      );
+    }
+    const closestNotification = await db
+    .select({
+      id: notifications.id,
+      time: notifications.notification_time,
+      medicine: medicines.name,
+      amount: notification_medicines.dosage_amount,
+      timing: notification_medicines.timing,
+      meal: notifications.meal,
+    })
+    .from(notifications)
+    .where(
+      and(
+        gt(notifications.notification_time, currentTime), // Fetch future notifications
+        eq(schedules.patient_id, patientIdId) // Ensure it's the correct patient
+      )
+    )
+    .leftJoin(schedules, eq(notifications.schedule_id, schedules.id)) // Link notifications to schedules
+    .leftJoin(
+      notification_medicines,
+      eq(notifications.id, notification_medicines.notification_id)
+    )
+    .leftJoin(medicines, eq(notification_medicines.medicine_id, medicines.id))
+    .orderBy(asc(notifications.notification_time)) // Order by soonest notification
+    .limit(1); // Limit to the closest notification
 
     const { id } = closestNotification[0];
 
+    if (!id) {
+      return NextResponse.json(
+        { error: "Internal Server Error" },
+        { status: 500 }
+      );
+    }
 
     const allMedicines = await db
       .select()
